@@ -15,6 +15,14 @@ fn hello_world() {
     println!("Iterate over, clear regions, len = {}", len);
 }
 
+fn _int_overflow() {
+    // int overflow
+    let mut i: u8 = 255;
+    println!("i = {}", i);
+    i += 1;
+    println!("i = {}", i);
+}
+
 fn int_type () {
     let twenty_six: i32 = 26;
     let one_million: i64 = 1_000_000;
@@ -42,14 +50,22 @@ fn int_type () {
         print!("{} ", i);
     }
 
-    // int overflow
-    let mut i: u8 = 255;
-    println!("i = {}", i);
-    i += 1;
-    println!("i = {}", i);
+    // int_overflow();
 }
+
+
+fn char_type() {
+    let c = 'c';
+    let z = '字';
+    let e = '🦀';
+
+    println!("字符长度: {} {} {}", c.len_utf8(), z.len_utf8(), e.len_utf8());
+    println!("字符变量在内存中的大小: {} {} {}", std::mem::size_of_val(&c), std::mem::size_of_val(&z), std::mem::size_of_val(&e));
+}
+
 
 fn main() {
     hello_world();
     int_type();
+    char_type();
 }
