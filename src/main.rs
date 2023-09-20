@@ -41,6 +41,12 @@ fn int_type () {
     for i in 'a'..='g' {
         print!("{} ", i);
     }
+
+    // int overflow
+    let mut i: u8 = 255;
+    println!("i = {}", i);
+    i += 1;
+    println!("i = {}", i);
 }
 
 fn main() {
