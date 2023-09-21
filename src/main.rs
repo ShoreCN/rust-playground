@@ -1,3 +1,5 @@
+mod str_test;
+
 fn hello_world() {
     let chinese = "你好，世界！";
     let japanese = "こんにちは世界";
@@ -130,4 +132,6 @@ fn main() {
     copy();
     changedable_ref();
     repeat_use_var();
+
+    str_test::slice();
 }
