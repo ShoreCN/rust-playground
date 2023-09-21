@@ -13,6 +13,11 @@ fn hello_world() {
     // 变量遮蔽, 改变变量的内容
     let len = 0;
     println!("Iterate over, clear regions, len = {}", len);
+
+    // 可变字符串
+    let mut hello_world = String::from("Hello, ");
+    hello_world.push_str("world!");
+    println!("{}", hello_world);
 }
 
 fn _int_overflow() {
@@ -39,16 +44,19 @@ fn int_type () {
     for i in range {
         print!("{} ", i);
     }
+    println!();
 
     // 包含最后一个元素
     for i in 0..=5 {
         print!("{} ", i);
     }
+    println!();
 
     // 字符序列
     for i in 'a'..='g' {
         print!("{} ", i);
     }
+    println!();
 
     // int_overflow();
 }
