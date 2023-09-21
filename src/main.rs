@@ -72,8 +72,22 @@ fn char_type() {
 }
 
 
+fn copy() {
+    // 深拷贝, 会复制堆上的数据
+    let s1 = String::from("hello");
+    let s2 = s1.clone();
+    println!("deep copy: s1 = {}, s2 = {}", s1, s2);
+
+    // 在栈上的数据, 会复制一份
+    let s3 = 100;
+    let s4 = s3;
+    println!("stack data copy: s3 = {}, s4 = {}", s3, s4);
+}
+
+
 fn main() {
     hello_world();
     int_type();
     char_type();
+    copy();
 }
