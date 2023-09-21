@@ -109,10 +109,25 @@ fn changedable_ref() {
 }
 
 
+fn repeat_use_var() {
+    let mut s = String::from("hello");
+
+    let s1 = &s;
+    let s2 = &s;
+    println!("s1 = {}, s2 = {}", s1, s2);
+    println!("s1 = {}, s2 = {}", s1, s2);
+
+    // 变量不可变引用s1, s2的作用域结束后, 可变引用s3的作用域开始, 不会产生冲突
+    let s3 = &mut s;
+    println!("s3 = {}", s3);
+}
+
+
 fn main() {
     hello_world();
     int_type();
     char_type();
     copy();
     changedable_ref();
+    repeat_use_var();
 }
