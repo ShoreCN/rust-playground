@@ -84,10 +84,35 @@ fn copy() {
     println!("stack data copy: s3 = {}, s4 = {}", s3, s4);
 }
 
+fn changedable_ref() {
+    let s = String::from("unchanged");
+
+    fn test_unchangedable_inside(s: &String) {
+        // error: cannot assign to `*s` because it is borrowed
+        // *s = String::from("changed");
+        println!("unchangedable inside: {}", s)
+    }
+
+    fn test_changedable_inside(s: &mut String) {
+        *s = String::from("changed");
+        println!("changedable inside: {}", s)
+    }
+
+    println!("changedable outside: {}", s);
+    test_unchangedable_inside(&s);
+    println!("unchangedable outside: {}", s);
+
+    let mut s = String::from("unchanged");
+    println!("changedable outside: {}", s);
+    test_changedable_inside(&mut s);
+    println!("changedable outside: {}", s);
+}
+
 
 fn main() {
     hello_world();
     int_type();
     char_type();
     copy();
+    changedable_ref();
 }
