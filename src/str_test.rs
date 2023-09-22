@@ -21,6 +21,49 @@ pub fn slice() {
     println!("a_slice = {:?}", a_slice);
 }
 
+fn str_replcae_op() {
+    println!("[str_replcae_op]");
+    let s: &str = "this is a &str";
+    let s2 = s.replace("&str", "str");
+    println!("&str replaced, s = {}", s2);
+
+    let s = String::from("This sentence is a unique sentence.");
+    let s2 = s.replace("unique", "copy");   // replace会返回一个新的字符串, 所以不需要是mut
+    println!("String replaced, s2 = {}", s2);
+    let s3 = s.replacen("sentence", "notice", 1);
+    println!("String replaced once(by replacen), s3 = {}", s3);
+    let mut s = String::from("This sentence is a unique sentence.");
+    s.replace_range(0..4, "That");  // replace_range会改变变量的内容, 所以必须是mut
+    println!("String replaced range, s = {}", s);
+}
+
+fn str_delete_op() {
+    println!("[str_delete_op]");
+    // pop
+    let mut s = String::from("T!");
+    let c = s.pop();    // pop会改变变量的内容, 所以必须是mut, 存在返回值
+    println!("pop char 1, s = {}, c = {:?}", s, c);
+    let c = s.pop();
+    println!("pop char 2, s = {}, c = {:?}", s, c);
+    let c = s.pop();
+    println!("pop char 3, s = {}, c = {:?}", s, c);
+
+    // remove 删除指定索引的字符
+    let mut s = String::from("测试");
+    let c = s.remove(0);    // remove会改变变量的内容, 所以必须是mut, 存在返回值
+    println!("remove char 1, s = {}, c = {:?}", s, c);
+
+    // truncate 删除指定索引之后的所有字符
+    let mut s = String::from("测试内容");
+    s.truncate(6);  // truncate会改变变量的内容, 所以必须是mut
+    println!("truncate, s = {}", s);
+
+    // clear 清空字符串
+    let mut s = String::from("测试内容");
+    s.clear();
+    println!("clear, s = {}", s);
+}
+
 pub fn str_op() {
     println!("[str_op]");
 
@@ -50,14 +93,9 @@ pub fn str_op() {
     s.insert_str(0, "Mike: ");
     println!("s insert str, s = {}", s);
 
-    let s = String::from("This sentence is a unique sentence.");
-    let s2 = s.replace("unique", "copy");   // replace会返回一个新的字符串, 所以不需要是mut
-    println!("str replaced, s2 = {}", s2);
-    let s3 = s.replacen("sentence", "notice", 1);
-    println!("str replaced once(by replacen), s3 = {}", s3);
-    let mut s = String::from("This sentence is a unique sentence.");
-    s.replace_range(0..4, "That");  // replace_range会改变变量的内容, 所以必须是mut
-    println!("str replaced range, s = {}", s);
+    str_replcae_op();
+
+    str_delete_op();
 
     let len = String::from("Hola").len();
     println!("len = {}", len);
