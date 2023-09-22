@@ -53,9 +53,17 @@ fn tuple_struct() {
     println!("origin = ({}, {}, {})", origin.0, origin.1, origin.2);
 }
 
+fn unit_struct() {
+    struct UnitStruct;
+    let _unit = UnitStruct;
+    // println!("unit struct = {:?}", unit);
+
+}
+
 pub fn struct_test() {
     normal_struct();
 
     tuple_struct();
 
+    unit_struct();
 }
