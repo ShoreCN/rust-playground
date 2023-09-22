@@ -64,6 +64,23 @@ fn str_delete_op() {
     println!("clear, s = {}", s);
 }
 
+fn str_content_op() {
+    println!("[str_content_op]");
+    // 字符串转义
+    let byte_escape = "I'm writing \u{211D}\x75\x73\x74!";
+    println!("byte_escape = {}", byte_escape);
+    let raw_str = r"I'm writing \u{211D}\x75\x73\x74!";
+    println!("raw_str = {}", raw_str);
+    let quotes = r#"This is a "quote" symbol"#;
+    println!("quotes = {}", quotes);
+
+    let cn_str = "测试内容";
+    for c in cn_str.chars() {
+        print!("{}, ", c);
+    }
+}
+
+
 fn str_concatenate_op() {
     println!("[str_concatenate_op]");
     let s1 = String::from("Warning: ");
@@ -117,7 +134,9 @@ pub fn str_op() {
     str_delete_op();
 
     str_concatenate_op();
-    
+
+    str_content_op();
+
     let len = String::from("Hola").len();
     println!("len = {}", len);
 
