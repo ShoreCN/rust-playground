@@ -64,6 +64,25 @@ fn str_delete_op() {
     println!("clear, s = {}", s);
 }
 
+fn str_concatenate_op() {
+    println!("[str_concatenate_op]");
+    let s1 = String::from("Warning: ");
+    let s2 = String::from("This is a warning message");
+    let s3 = s1 + &s2 + "!";  // s1被移动了, 不能再使用
+    // println!("s1 = {}", s1); // error: value borrowed here after move
+    println!("s2 = {}", s2);
+    println!("s3 = {}", s3);
+
+    // format 
+    let s1 = String::from("Info:");
+    let s2 = String::from("This is a info message");
+    let s3 = format!("{} {}.", s1, s2);
+    println!("s1 = {}", s1);
+    println!("s2 = {}", s2);
+    println!("s3 = {}", s3);
+
+}
+
 pub fn str_op() {
     println!("[str_op]");
 
@@ -97,6 +116,8 @@ pub fn str_op() {
 
     str_delete_op();
 
+    str_concatenate_op();
+    
     let len = String::from("Hola").len();
     println!("len = {}", len);
 
