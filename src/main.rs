@@ -1,6 +1,7 @@
 mod str_test;
 mod tuple_test;
 mod struct_test;
+mod enum_test;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -141,4 +142,6 @@ fn main() {
     tuple_test::tuple_learning();
 
     struct_test::struct_test();
+
+    enum_test::enum_test();
 }
