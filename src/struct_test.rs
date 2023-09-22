@@ -1,3 +1,5 @@
+#[derive(Debug)]
+
 struct Elevator {
     floor: u8,
     capacity: u8,
@@ -60,10 +62,23 @@ fn unit_struct() {
 
 }
 
+fn strcut_display() {
+    let ele = Elevator {
+        floor: 1,
+        capacity: 10,
+        occupants: 0,
+    };
+    println!("display ele struct = {:?}", ele);
+    println!("display ele struct friendly = {:#?}", ele);
+    dbg!(ele);
+}
+
 pub fn struct_test() {
     normal_struct();
 
     tuple_struct();
 
     unit_struct();
+
+    strcut_display();
 }
