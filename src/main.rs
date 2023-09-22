@@ -1,4 +1,5 @@
 mod str_test;
+mod tuple_learning;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -135,4 +136,6 @@ fn main() {
 
     str_test::slice();
     str_test::str_op();
+
+    tuple_learning::tuple_learning();   
 }
