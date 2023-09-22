@@ -1,5 +1,6 @@
 mod str_test;
 mod tuple_test;
+mod struct_test;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -137,5 +138,7 @@ fn main() {
     str_test::slice();
     str_test::str_op();
 
-    tuple_test::tuple_learning();   
+    tuple_test::tuple_learning();
+
+    struct_test::struct_test();
 }
