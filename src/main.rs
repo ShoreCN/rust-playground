@@ -134,4 +134,5 @@ fn main() {
     repeat_use_var();
 
     str_test::slice();
+    str_test::str_op();
 }
