@@ -42,6 +42,20 @@ fn normal_struct() {
              ele3.floor, ele3.capacity, ele3.occupants);
 }
 
+fn tuple_struct() {
+    struct Color(u8, u8, u8);
+    struct Point(i32, i32, i32);
+
+    let black = Color(1, 2, 3);
+    let origin = Point(3, 2, 1);
+
+    println!("black = ({}, {}, {})", black.0, black.1, black.2);
+    println!("origin = ({}, {}, {})", origin.0, origin.1, origin.2);
+}
+
 pub fn struct_test() {
-    normal_struct()
+    normal_struct();
+
+    tuple_struct();
+
 }
