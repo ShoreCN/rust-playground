@@ -15,6 +15,9 @@ pub fn slice() {
     let world = &s[6..=10];
     println!("hello = {}, world = {}", hello, world);
 
+    let a = [1, 2, 3, 4, 5];
+    let a_slice = &a[1..3];
+    println!("a_slice = {:?}", a_slice);
 }
 
 // fn main() {
