@@ -35,6 +35,45 @@ fn if_process () {
     println!("{} is prized = {}", child.name, is_prized);
 }
 
+fn for_loop_proccess() {
+    // for loop
+    for i in 1..=3 {
+        println!("Day {}", i);
+    }
+
+    let steps = [String::from("first"), String::from("second"), String::from("third")];
+    for i in steps {
+        println!("step: {}", i);
+    }
+    // steps is moved to for loop, so it can't be used here
+    // println!("steps = {:?}", steps); 
+
+    let mut steps = [String::from("first"), String::from("second")];
+    for i in &steps {
+        println!("step: {}", i);
+
+    }
+    println!("steps = {:?}", steps); // steps is not moved, so it can be used here
+
+    // mutable reference
+    for i in &mut steps {
+        i.push_str(" step");
+        println!("step: {}", i);
+    }
+    println!("steps = {:?}", steps);
+
+    // enumerate
+    for (i, step) in steps.iter().enumerate() {
+        println!("element {}: {}", i, step);
+    }
+
+    for _ in 0..3 {
+        print!("hi!");
+    }
+}
+
 pub fn process_test() {
     if_process();
+
+    for_loop_proccess();
 }
