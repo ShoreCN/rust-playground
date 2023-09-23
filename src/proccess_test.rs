@@ -72,8 +72,24 @@ fn for_loop_proccess() {
     }
 }
 
+fn while_loop_process() {
+    let mut i = 0;
+    while i < 3 {
+        print!("hey!");
+        i += 1;
+    }
+
+    let a = [1, 2, 3, 4, 5];
+    i = 0;
+    while i < a.len() {
+        print!("{} ", a[i]);
+        i += 1;
+    }
+}
+
 pub fn process_test() {
     if_process();
 
     for_loop_proccess();
+    while_loop_process();
 }
