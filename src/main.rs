@@ -3,6 +3,7 @@ mod tuple_test;
 mod struct_test;
 mod enum_test;
 mod array_test;
+mod proccess_test;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -147,4 +148,6 @@ fn main() {
     enum_test::enum_test();
 
     array_test::array_test();
+
+    proccess_test::process_test();
 }
