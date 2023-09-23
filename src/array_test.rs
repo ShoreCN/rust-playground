@@ -1,5 +1,4 @@
 
-
 fn base_type_array() {
     let months = ["January", "February", "March", "April", "May", "June", "July",
                   "August", "September", "October", "November", "December"];
@@ -19,9 +18,15 @@ fn base_type_array() {
 
 }
 
+fn complex_type_array() {
+
+    let string_array: [String; 3] = std::array::from_fn(|_i| String::from("hello"));
+    println!("String_array created by std::array::from_fn = {:?}", string_array);
+}
+
 pub fn array_test () {
 
     base_type_array();
 
-    
+    complex_type_array();
 }
