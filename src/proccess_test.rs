@@ -87,9 +87,23 @@ fn while_loop_process() {
     }
 }
 
+fn loop_loop_process() {
+    let mut i = 3;
+    let end = loop {
+        print!("{} ", i);
+        i -= 1;
+        if i <= 0 {
+            // break可以返回一个值
+            break "goodbye!";
+        }
+    };
+    println!("ending = {}", end);
+}
+
 pub fn process_test() {
     if_process();
 
     for_loop_proccess();
     while_loop_process();
+    loop_loop_process();
 }
