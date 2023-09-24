@@ -4,6 +4,7 @@ mod struct_test;
 mod enum_test;
 mod array_test;
 mod proccess_test;
+mod match_test;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -150,4 +151,6 @@ fn main() {
     array_test::array_test();
 
     proccess_test::process_test();
+
+    match_test::match_test();
 }
