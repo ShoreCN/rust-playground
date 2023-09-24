@@ -56,6 +56,21 @@ fn match_and_if_let() {
     
 }
 
+fn matches() {
+    let issues = [
+        IssueType::Bug,
+        IssueType::Task(34),
+        IssueType::Feature,
+        IssueType::Custom(String::from("undefined")),
+    ];
+
+    // 采用matches来过滤其中的Bug和Feature, matches返回的是一个布尔值
+    let filter_issues = issues.iter().filter(|i| matches!(i, IssueType::Bug | IssueType::Feature)).collect::<Vec<_>>();
+    println!("filtered issues: {:?}", filter_issues);
+
+}
+
 pub fn match_test() {
     match_and_if_let();
+    matches();
 }
