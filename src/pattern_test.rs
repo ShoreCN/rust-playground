@@ -28,7 +28,24 @@ fn if_let () {
     }
 }
 
+fn match_multiple_pattern () {
+    let x = 1;
+    match x {
+        1 | 2 => println!("one or two"),
+        3..=5 => println!("three through five"),
+        _ => println!("others"),
+    }
+
+    let c = 'c';
+    match c {
+        'a'..='j' => println!("early ASCII letter"),
+        'k'..='z' => println!("late ASCII letter"),
+        _ => println!("others"),
+    }
+}
+
 pub fn pattern_test() {
     if_let();
     while_let();
+    match_multiple_pattern();
 }
