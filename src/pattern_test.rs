@@ -103,6 +103,24 @@ fn desctruct_array() {
         assert!(last_one == &3);
     }
 
+    // 元组的解构
+    let tuple = (1, 2, 3, 4, 5);
+    match tuple {
+        (a, .., b) => println!("head = {}, tail = {}", a, b),
+    }
+
+}
+
+fn dotdot() {
+    let elevator = elevator::Elevator {
+        current_floor: 1,
+        direction: elevator::Direction::Up,
+        destination: 3,
+        state: elevator::State::Moving,
+    };
+    match elevator {
+        elevator::Elevator {current_floor, ..} => println!("current_floor = {}", current_floor),
+    }
 }
 
 pub fn pattern_test() {
@@ -113,4 +131,5 @@ pub fn pattern_test() {
     desctruct_enum();
     destruct_complex_data();
     desctruct_array();
+    dotdot();
 }
