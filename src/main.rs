@@ -7,6 +7,7 @@ mod proccess_test;
 mod match_test;
 mod option_test;
 mod pattern_test;
+mod elevator;
 
 fn hello_world() {
     let chinese = "你好，世界！";

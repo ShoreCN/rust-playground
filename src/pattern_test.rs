@@ -1,4 +1,6 @@
 
+use crate::elevator;
+
 
 fn while_let () {
     let mut stack = Vec::new();
@@ -63,9 +65,21 @@ fn destruct_struct () {
     }
 }
 
+fn desctruct_enum () {
+    let elevator_event = elevator::Event::Call(3, elevator::Direction::Up);
+
+    match elevator_event {
+        elevator::Event::Call(floor, direction) => println!("Call: floor = {}, direction = {:?}", floor, direction),
+        elevator::Event::FloorReached(floor) => println!("FloorReached: floor = {}", floor),
+        elevator::Event::Stop => println!("Stop"),
+    }
+
+}
+
 pub fn pattern_test() {
     if_let();
     while_let();
     match_multiple_pattern();
     destruct_struct();
+    desctruct_enum();
 }
