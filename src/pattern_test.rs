@@ -44,8 +44,28 @@ fn match_multiple_pattern () {
     }
 }
 
+fn destruct_struct () {
+    struct ElevatorButton {
+        floor: u8,
+        panel_id: char,
+    }
+
+    let button = ElevatorButton { floor: 3, panel_id: 'c' };
+    let ElevatorButton { floor: a, panel_id: b } = button;
+    println!("floor = {}, panel_id = {}", a, b);
+    let ElevatorButton { floor, panel_id } = button;
+    println!("floor = {}, panel_id = {}", floor, panel_id);
+
+    match button {
+        ElevatorButton { floor: 1|2, panel_id } => println!("first or second floor, panel_id = {}", panel_id),
+        ElevatorButton { floor, panel_id: 'c' } => println!("third floor, No. {}", floor),
+        ElevatorButton { floor, panel_id } => println!("others, floor = {}, panel_id = {}", floor, panel_id),
+    }
+}
+
 pub fn pattern_test() {
     if_let();
     while_let();
     match_multiple_pattern();
+    destruct_struct();
 }
