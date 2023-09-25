@@ -76,10 +76,25 @@ fn desctruct_enum () {
 
 }
 
+fn destruct_complex_data () {
+
+    // 解构结构体和枚举嵌套的情况
+    let elevator = elevator::Elevator {
+        current_floor: 1,
+        direction: elevator::Direction::Up,
+        destination: 3,
+        state: elevator::State::Overload(5),
+    };
+    if let elevator::Elevator { current_floor, direction, destination, state: elevator::State::Overload(overload) } = elevator {
+        print!("destrcut elevator: current_floor = {}, direction = {:?}, destination = {}, overload = {}", current_floor, direction, destination, overload);
+    }
+}
+
 pub fn pattern_test() {
     if_let();
     while_let();
     match_multiple_pattern();
     destruct_struct();
     desctruct_enum();
+    destruct_complex_data();
 }
