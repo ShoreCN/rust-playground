@@ -141,6 +141,33 @@ fn match_guard() {
     }
 }
 
+fn bind() {
+    let x = 1;
+    match x {
+        e @ 1..=5 => println!("got an element {} in 1..=5", e),
+        _ => println!("anything"),
+    }
+
+    // 绑定的同时进行解构
+    let elev = elevator::Elevator {
+        current_floor: 1,
+        direction: elevator::Direction::Up,
+        destination: 30,
+        state: elevator::State::Moving,
+    };
+    if let e @ elevator::Elevator {current_floor: 1, ..} = elev {
+        println!("e.current_floor = {}, e = {:?}", e.current_floor, e);
+    }
+
+    #[derive(Debug)]
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+    let p @ Point{x: px, y: py} = Point {x: 1, y: 2};
+    println!("p = {:?}, px = {}, py = {}", p, px, py);
+}
+
 pub fn pattern_test() {
     if_let();
     while_let();
@@ -151,4 +178,5 @@ pub fn pattern_test() {
     desctruct_array();
     dotdot();
     match_guard();
+    bind();
 }

@@ -5,6 +5,7 @@ pub enum Direction {
     Down,
 }
 
+#[derive(Debug)]
 pub enum State {
     Idle,
     Moving,
@@ -18,6 +19,7 @@ pub enum Event {
     Stop,
 }
 
+#[derive(Debug)]
 pub struct Elevator {
     pub current_floor: u8,
     pub direction: Direction,
