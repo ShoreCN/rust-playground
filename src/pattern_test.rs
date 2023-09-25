@@ -123,6 +123,24 @@ fn dotdot() {
     }
 }
 
+fn match_guard() {
+    let elevator = elevator::Elevator {
+        current_floor: 1,
+        direction: elevator::Direction::Up,
+        destination: 30,
+        state: elevator::State::Moving,
+    };
+    let office_floor_range = 20..=30;
+    match elevator {
+        // 如果目标楼层在20-30之间, 则打印"Go to the office floor"
+        elevator:: Elevator {destination, ..} 
+            if &destination >= office_floor_range.start() && 
+                &destination <= office_floor_range.end() 
+            => println!("Go to the office floor"),
+        _ => println!("Go to the low floor"),
+    }
+}
+
 pub fn pattern_test() {
     if_let();
     while_let();
@@ -132,4 +150,5 @@ pub fn pattern_test() {
     destruct_complex_data();
     desctruct_array();
     dotdot();
+    match_guard();
 }
