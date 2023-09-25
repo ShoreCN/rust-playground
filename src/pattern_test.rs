@@ -90,6 +90,21 @@ fn destruct_complex_data () {
     }
 }
 
+fn desctruct_array() {
+    let array: [u8; 3] = [1, 2, 3];
+    let [a, b, c] = array;
+    assert!(a == 1 && b == 2 && c == 3);
+    let [.., last_one] = array;
+    assert!(last_one == 3);
+
+    // 不定长数组的解构
+    let array: &[u8] = &[1, 2, 3];
+    if let [.., last_one] = array {
+        assert!(last_one == &3);
+    }
+
+}
+
 pub fn pattern_test() {
     if_let();
     while_let();
@@ -97,4 +112,5 @@ pub fn pattern_test() {
     destruct_struct();
     desctruct_enum();
     destruct_complex_data();
+    desctruct_array();
 }
