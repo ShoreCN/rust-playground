@@ -8,6 +8,7 @@ mod match_test;
 mod option_test;
 mod pattern_test;
 mod elevator;
+mod method;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -158,4 +159,6 @@ fn main() {
     match_test::match_test();
     option_test::option_test();
     pattern_test::pattern_test();
+
+    method::method_test();
 }
