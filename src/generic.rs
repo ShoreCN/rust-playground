@@ -1,3 +1,5 @@
+use std::array;
+
 use crate::elevator::{Elevator, ElevatorWeightController};
 
 
@@ -24,6 +26,19 @@ impl ElevatorWeightController<String> {
     fn get_weight_annotation(&self) -> String {
         format!("The elevator weight limit is {} kg, current weight is {} kg.", self.weight_limit, self.current_weight)
     }
+}
+
+fn display_passenger_weight<T: std::fmt::Display>(passenger_array: &[T]) {
+    for passenger in passenger_array {
+        println!("passenger weight = {}", passenger);
+    }
+}
+
+fn array_generic() {
+    let passenger_array = [50, 60, 70, 80];
+    display_passenger_weight(&passenger_array);
+    let passenger_array = ["50", "60", "70", "80"];
+    display_passenger_weight(&passenger_array);
 }
 
 pub fn generic() {
@@ -61,4 +76,6 @@ pub fn generic() {
         weight_limit: "1000.1".to_string(),
     };
     println!("get_weight_annotation = {}", elevator_weight.get_weight_annotation());
+
+    array_generic();
 }
