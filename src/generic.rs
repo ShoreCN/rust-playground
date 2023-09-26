@@ -19,6 +19,13 @@ impl<T: std::ops::AddAssign + Copy> ElevatorWeightController<T> {
     }
 }
 
+impl ElevatorWeightController<String> {
+    // 通过指定泛型参数类型, 限制了该方法只能用于String类型对应的ElevatorWeightController
+    fn get_weight_annotation(&self) -> String {
+        format!("The elevator weight limit is {} kg, current weight is {} kg.", self.weight_limit, self.current_weight)
+    }
+}
+
 pub fn generic() {
     let mut elevator = Elevator::new();
     elevator.weight_add(50);
@@ -49,4 +56,9 @@ pub fn generic() {
     elevator_weight.increase_weight(55.3);
     println!("get_current_weight= {:?}", elevator_weight.get_current_weight());
 
+    let elevator_weight = ElevatorWeightController {
+        current_weight: "77.77".to_string(),
+        weight_limit: "1000.1".to_string(),
+    };
+    println!("get_weight_annotation = {}", elevator_weight.get_weight_annotation());
 }
