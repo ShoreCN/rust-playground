@@ -25,4 +25,6 @@ pub struct Elevator {
     pub direction: Direction,
     pub destination: u8,
     pub state: State,
+    pub current_weight: u32,
+    pub weight_limit: u32,
 }

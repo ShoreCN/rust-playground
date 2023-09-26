@@ -9,6 +9,7 @@ mod option_test;
 mod pattern_test;
 mod elevator;
 mod method;
+mod generic;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -161,4 +162,6 @@ fn main() {
     pattern_test::pattern_test();
 
     method::method_test();
+
+    generic::generic();
 }

@@ -9,6 +9,8 @@ impl elevator::Elevator {
             direction: elevator::Direction::Down,
             destination: 1,
             state: elevator::State::Idle,
+            current_weight: 0,
+            weight_limit: 1000,
         }
     }
 

@@ -84,8 +84,10 @@ fn destruct_complex_data () {
         direction: elevator::Direction::Up,
         destination: 3,
         state: elevator::State::Overload(5),
+        current_weight: 0,
+        weight_limit: 1000,
     };
-    if let elevator::Elevator { current_floor, direction, destination, state: elevator::State::Overload(overload) } = elevator {
+    if let elevator::Elevator { current_floor, direction, destination, state: elevator::State::Overload(overload), .. } = elevator {
         print!("destrcut elevator: current_floor = {}, direction = {:?}, destination = {}, overload = {}", current_floor, direction, destination, overload);
     }
 }
@@ -117,6 +119,8 @@ fn dotdot() {
         direction: elevator::Direction::Up,
         destination: 3,
         state: elevator::State::Moving,
+        current_weight: 0,
+        weight_limit: 1000,
     };
     match elevator {
         elevator::Elevator {current_floor, ..} => println!("current_floor = {}", current_floor),
@@ -129,6 +133,8 @@ fn match_guard() {
         direction: elevator::Direction::Up,
         destination: 30,
         state: elevator::State::Moving,
+        current_weight: 0,
+        weight_limit: 1000,
     };
     let office_floor_range = 20..=30;
     match elevator {
@@ -154,6 +160,8 @@ fn bind() {
         direction: elevator::Direction::Up,
         destination: 30,
         state: elevator::State::Moving,
+        current_weight: 0,
+        weight_limit: 1000,
     };
     if let e @ elevator::Elevator {current_floor: 1, ..} = elev {
         println!("e.current_floor = {}, e = {:?}", e.current_floor, e);
