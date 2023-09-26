@@ -28,3 +28,9 @@ pub struct Elevator {
     pub current_weight: u32,
     pub weight_limit: u32,
 }
+
+#[derive(Debug)]
+pub struct ElevatorWeightController<T> {
+    pub current_weight: T,
+    pub weight_limit: T,
+}
