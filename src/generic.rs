@@ -28,7 +28,16 @@ impl ElevatorWeightController<String> {
     }
 }
 
+// 对数组进行泛型, 并通过trait bound限制泛型参数类型
 fn display_passenger_weight<T: std::fmt::Display>(passenger_array: &[T]) {
+    for passenger in passenger_array {
+        println!("passenger weight = {}", passenger);
+    }
+}
+
+// 对数组进行泛型, 并通过const泛型参数限制数组长度
+fn display_passenger_info<T: std::fmt::Display, const N: usize>(passenger_array: [T; N]){
+    println!("passenger_array length = {}", N);
     for passenger in passenger_array {
         println!("passenger weight = {}", passenger);
     }
@@ -39,6 +48,7 @@ fn array_generic() {
     display_passenger_weight(&passenger_array);
     let passenger_array = ["50", "60", "70", "80"];
     display_passenger_weight(&passenger_array);
+    display_passenger_info(passenger_array)
 }
 
 pub fn generic() {
