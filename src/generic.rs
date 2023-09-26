@@ -8,6 +8,17 @@ impl Elevator {
     }
 }
 
+impl<T: std::ops::AddAssign + Copy> ElevatorWeightController<T> {
+    fn get_current_weight(&self) -> &T {
+        &self.current_weight
+    }
+
+    fn increase_weight(&mut self, weight: T) -> T {
+        self.current_weight += weight;
+        self.current_weight
+    }
+}
+
 pub fn generic() {
     let mut elevator = Elevator::new();
     elevator.weight_add(50);
@@ -22,7 +33,7 @@ pub fn generic() {
     };
     println!("elevator_weight = {:?}", elevator_weight);
 
-    let elevator_weight = ElevatorWeightController {
+    let mut elevator_weight = ElevatorWeightController {
         current_weight: 77.77,
         weight_limit: 1000.1,
     };
@@ -34,5 +45,8 @@ pub fn generic() {
     //     weight_limit: 1000.1,
     // };
     
-    
+    println!("get_current_weight= {:?}", elevator_weight.get_current_weight());
+    elevator_weight.increase_weight(55.3);
+    println!("get_current_weight= {:?}", elevator_weight.get_current_weight());
+
 }
