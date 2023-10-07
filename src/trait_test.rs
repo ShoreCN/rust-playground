@@ -11,6 +11,13 @@ trait Annotation {
     }
 }
 
+trait Beep {
+    // 声明一个方法
+    fn beep(&self) {
+        println!("Beep!");
+    }
+}
+
 impl Annotation for Elevator {
     // 实现 Annotation trait, 该方法返回String类型
     fn get_annotation(&self) -> String {
@@ -30,6 +37,35 @@ impl Annotation for ElevatorWeightController<u32> {
     }
 }
 
+impl Beep for Elevator {
+    // 实现 Beep trait, 该方法返回String类型
+    fn beep(&self) {
+        println!("Beep! Beep!");
+    }
+}
+
+// 使用特征作为参数
+fn print_annotation<T: Annotation>(item: &T) {
+    println!("{}", item.get_annotation());
+}
+
+// 使用特征作为参数, 使用语法糖表达
+fn print_annotation_with_syntax_sugar(item: &impl Annotation) {
+    println!("{}", item.get_annotation());
+}
+
+// 多重约束
+fn beep_and_alarm<T: Annotation + Beep>(item: &T) {
+    item.beep();
+    item.alarm();
+}
+
+// 多重约束使用语法糖表达
+fn beep_and_alarm_with_syntax_sugar(item: &(impl Annotation + Beep)) {
+    item.beep();
+    item.alarm();
+}
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
@@ -41,4 +77,9 @@ pub fn trait_test() {
     };
     println!("{}", elevator_weight_controller.get_annotation());
     elevator_weight_controller.alarm();
+
+    print_annotation(&elevator);
+    print_annotation_with_syntax_sugar(&elevator);
+    beep_and_alarm(&elevator);
+    beep_and_alarm_with_syntax_sugar(&elevator);
 }
