@@ -104,6 +104,13 @@ fn create_elevator() -> impl Annotation {
     Elevator::new()
 }
 
+// 使用derive来自动实现特征
+#[derive(Debug, Clone, Copy)]
+struct ElevatorRemark2<T> {
+    _remark: T,
+    _timestamp: u64,
+}
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
