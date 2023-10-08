@@ -77,6 +77,7 @@ where
     item2.beep();
 }
 
+// 通过特征约束做到对满足特定条件的类型实现方法
 struct ElevatorRemark<T> {
     remark: T,
     timestamp: u64,
@@ -97,6 +98,11 @@ impl<T: std::fmt::Display> ElevatorRemark<T> {
     }
 }
 
+
+// 通过返回impl trait来简化代码
+fn create_elevator() -> impl Annotation {
+    Elevator::new()
+}
 
 pub fn trait_test() {
     let elevator = Elevator::new();
@@ -126,4 +132,6 @@ pub fn trait_test() {
     // _remark.print_remark();
     // the method `print_remark` exists for struct `ElevatorRemark<Elevator>`, but its trait bounds were not satisfied
     // method cannot be called on `ElevatorRemark<Elevator>` due to unsatisfied trait bounds
+
+    let _elevator = create_elevator();
 }
