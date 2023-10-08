@@ -66,6 +66,17 @@ fn beep_and_alarm_with_syntax_sugar(item: &(impl Annotation + Beep)) {
     item.alarm();
 }
 
+// 使用where子句来简化多重约束
+fn print_annotation_and_beep<T, U>(item1: &T, item2: &U)
+where
+    T: Annotation,
+    U: Beep,
+{
+    println!("{}", item1.get_annotation());
+    item1.alarm();
+    item2.beep();
+}
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
@@ -82,4 +93,6 @@ pub fn trait_test() {
     print_annotation_with_syntax_sugar(&elevator);
     beep_and_alarm(&elevator);
     beep_and_alarm_with_syntax_sugar(&elevator);
+
+    print_annotation_and_beep(&elevator_weight_controller, &elevator);
 }
