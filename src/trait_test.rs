@@ -77,6 +77,27 @@ where
     item2.beep();
 }
 
+struct ElevatorRemark<T> {
+    remark: T,
+    timestamp: u64,
+}
+
+impl<T> ElevatorRemark<T> {
+    fn new(remark: T) -> Self {
+        Self {
+            remark,
+            timestamp: 0,
+        }
+    }
+}
+
+impl<T: std::fmt::Display> ElevatorRemark<T> {
+    fn print_remark(&self) {
+        println!("remark: {}, at {}", self.remark, self.timestamp)
+    }
+}
+
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
@@ -95,4 +116,14 @@ pub fn trait_test() {
     beep_and_alarm_with_syntax_sugar(&elevator);
 
     print_annotation_and_beep(&elevator_weight_controller, &elevator);
+
+    let remark = ElevatorRemark::new("The elevator is overloaded!");
+    remark.print_remark();
+    let remark = ElevatorRemark::new(123);
+    remark.print_remark();
+    // init remark by a param without Display trait
+    let _remark = ElevatorRemark::new(elevator);
+    // _remark.print_remark();
+    // the method `print_remark` exists for struct `ElevatorRemark<Elevator>`, but its trait bounds were not satisfied
+    // method cannot be called on `ElevatorRemark<Elevator>` due to unsatisfied trait bounds
 }
