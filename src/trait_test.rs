@@ -187,6 +187,25 @@ impl FloorCombination<ResidentialFloor> for OfficeFloor {
     }
 }
 
+// super trait, 用于扩展已有的trait
+trait SuperBrief: Brief {
+    fn super_brief(&self) -> String {
+        format!("super brief: {}", self.brief())
+    }
+}
+
+impl SuperBrief for OfficeFloor {}
+
+struct _CookingFloor {
+    floor_number: u8,
+    kitchen_number: u8,
+}
+
+// 因为CookingFloor没有实现Brief trait, 所以无法实现SuperBrief trait
+// panic: the trait bound `CookingFloor: Brief` is not satisfied
+// impl SuperBrief for CookingFloor {}
+
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
