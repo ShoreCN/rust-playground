@@ -159,6 +159,19 @@ trait ShortBrief {
     fn short_brief(&self) -> Self::Output;
 }
 
+// 泛型参数的默认类型
+trait FloorCombination<T = Self> {
+    type Output;
+    fn add(&self, other: &T) -> Self::Output;
+}
+
+impl FloorCombination<ResidentialFloor> for OfficeFloor {
+    type Output = String;
+    fn add(&self, other: &ResidentialFloor) -> Self::Output {
+        format!("OfficeFloor {} + ResidentialFloor {}", self.floor_number, other.floor_number)
+    }
+}
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
@@ -206,4 +219,14 @@ pub fn trait_test() {
     for floor in building.floors {
         println!("{}", get_brief(floor));
     }
+    
+    let first_floor = OfficeFloor {
+        floor_number: 1,
+        company_name: String::from("ABC"),
+    };
+    let second_floor = ResidentialFloor {
+        floor_number: 2,
+        room_number: 3,
+    };
+    println!("floor combination result: {}", first_floor.add(&second_floor));
 }
