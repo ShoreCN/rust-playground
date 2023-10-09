@@ -153,6 +153,12 @@ fn get_brief(x: Box<dyn Brief>) -> String {
 //     x.brief()
 // }
 
+// 关联类型, 可以增加代码的可读性, 减少代码的重复, 相比泛型, 关联类型更加灵活
+trait ShortBrief {
+    type Output;
+    fn short_brief(&self) -> Self::Output;
+}
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
