@@ -111,6 +111,48 @@ struct ElevatorRemark2<T> {
     _timestamp: u64,
 }
 
+// 特征对象
+trait Brief {
+    fn brief(&self) -> String;
+}
+
+// 通过特征对象来实现多态, 使用泛型的话只能保证同一类型
+// 通过dyn关键字来声明特征对象, 即动态分发(dynamic dispatch)
+struct BuildingStructure {
+    floors: Vec<Box<dyn Brief>>,
+    // floors: Vec<&dyn Brief>,
+}
+
+struct OfficeFloor {
+    floor_number: u8,
+    company_name: String,
+}
+
+struct ResidentialFloor {
+    floor_number: u8,
+    room_number: u8,
+}
+
+impl Brief for OfficeFloor {
+    fn brief(&self) -> String {
+        format!("[OfficeFloor] floor_number = {}, company_name = {}", self.floor_number, self.company_name)
+    }
+}
+
+impl Brief for ResidentialFloor {
+    fn brief(&self) -> String {
+        format!("[ResidentialFloor] floor_number = {}, room_number = {}", self.floor_number, self.room_number)
+    }
+}
+
+fn get_brief(x: Box<dyn Brief>) -> String {
+    format!("Floor brief: {}", x.brief())
+}
+
+// fn get_brief(x: &dyn Brief) -> String {
+//     x.brief()
+// }
+
 pub fn trait_test() {
     let elevator = Elevator::new();
     println!("{}", elevator.get_annotation());
@@ -141,4 +183,21 @@ pub fn trait_test() {
     // method cannot be called on `ElevatorRemark<Elevator>` due to unsatisfied trait bounds
 
     let _elevator = create_elevator();
+
+    let building = BuildingStructure {
+        floors: vec![
+            Box::new(OfficeFloor {
+                floor_number: 1,
+                company_name: String::from("ABC"),
+            }),
+            Box::new(ResidentialFloor {
+                floor_number: 2,
+                room_number: 3,
+            }),
+        ],
+    };
+    println!("building brief:");
+    for floor in building.floors {
+        println!("{}", get_brief(floor));
+    }
 }
