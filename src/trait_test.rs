@@ -1,5 +1,5 @@
 
-use crate::elevator::{Elevator, ElevatorWeightController, self};
+use crate::elevator::{Elevator, ElevatorWeightController};
 
 trait Annotation {
     // 声明一个方法, 该方法返回String类型, 不用实现, 所以使用;结尾
@@ -16,6 +16,10 @@ trait Beep {
     fn beep(&self) {
         println!("Beep!");
     }
+
+    fn tictak() {
+        println!("TicTak from trait!");
+    }
 }
 
 impl Annotation for Elevator {
@@ -29,6 +33,10 @@ impl Annotation for Elevator {
 impl Elevator {
     fn get_annotation(&self) -> String {
         format!("[struct method] The elevator now is {:?}, current floor is {}, current direction is {:?}, current destination is {}, current weight is {} kg, weight limit is {} kg.", self.state, self.current_floor, self.direction, self.destination, self.current_weight, self.weight_limit)
+    }
+
+    fn tictak() {
+        println!("TicTak from struct!");
     }
 }
 
@@ -244,4 +252,8 @@ pub fn trait_test() {
     println!("Annotation from struct method: {}", Elevator::get_annotation(&elevator2));
     println!("Annotation from trait object: {}", Annotation::get_annotation(&elevator2));
     
+    Elevator::tictak();
+    // Beep::tictak();  // 无法直接调用trait里面的关联函数(没有指定self的函数)
+    // 完全限定语法, 通过特征名字来调用关联函数
+    <Elevator as Beep>::tictak();
 }
