@@ -1,5 +1,5 @@
 
-use crate::elevator::{Elevator, ElevatorWeightController};
+use crate::elevator::{Elevator, ElevatorWeightController, self};
 
 trait Annotation {
     // 声明一个方法, 该方法返回String类型, 不用实现, 所以使用;结尾
@@ -21,7 +21,14 @@ trait Beep {
 impl Annotation for Elevator {
     // 实现 Annotation trait, 该方法返回String类型
     fn get_annotation(&self) -> String {
-        format!("The elevator now is {:?}, current floor is {}, current direction is {:?}, current destination is {}, current weight is {} kg, weight limit is {} kg.", self.state, self.current_floor, self.direction, self.destination, self.current_weight, self.weight_limit)
+        format!("[trait method] The elevator now is {:?}, current floor is {}, current direction is {:?}, current destination is {}, current weight is {} kg, weight limit is {} kg.", self.state, self.current_floor, self.direction, self.destination, self.current_weight, self.weight_limit)
+    }
+}
+
+// 类型中存在同名方法
+impl Elevator {
+    fn get_annotation(&self) -> String {
+        format!("[struct method] The elevator now is {:?}, current floor is {}, current direction is {:?}, current destination is {}, current weight is {} kg, weight limit is {} kg.", self.state, self.current_floor, self.direction, self.destination, self.current_weight, self.weight_limit)
     }
 }
 
@@ -201,7 +208,7 @@ pub fn trait_test() {
     // the method `print_remark` exists for struct `ElevatorRemark<Elevator>`, but its trait bounds were not satisfied
     // method cannot be called on `ElevatorRemark<Elevator>` due to unsatisfied trait bounds
 
-    let _elevator = create_elevator();
+    let elevator = create_elevator();
 
     let building = BuildingStructure {
         floors: vec![
@@ -229,4 +236,12 @@ pub fn trait_test() {
         room_number: 3,
     };
     println!("floor combination result: {}", first_floor.add(&second_floor));
+
+    // elevator created by create_elevator() is a trait object
+    println!("Annotation from trait method: {}", elevator.get_annotation());
+    let elevator2 = Elevator::new();
+    println!("Annotation from struct method: {}", elevator2.get_annotation());
+    println!("Annotation from struct method: {}", Elevator::get_annotation(&elevator2));
+    println!("Annotation from trait object: {}", Annotation::get_annotation(&elevator2));
+    
 }
