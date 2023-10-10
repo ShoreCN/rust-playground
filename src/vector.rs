@@ -35,6 +35,40 @@ fn vector_creation() {
 }
 
 
+fn vector_iteration() {
+    let mut v: Vec<String> = vec![String::from("aa"), String::from("bb"), String::from("cc")];
+    for i in &mut v {
+        i.push_str("!!");
+        println!("{}", i);
+    }
+}
+
+fn different_element_type_vector() {
+    // 不同成员类型的元素
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Float(3.14),
+        SpreadsheetCell::Text(String::from("Hello")),
+    ];
+    
+    for i in row {
+        match i {
+            SpreadsheetCell::Int(i) => println!("Int: {}", i),
+            SpreadsheetCell::Float(f) => println!("Float: {}", f),
+            SpreadsheetCell::Text(s) => println!("Text: {}", s),
+        }
+    }
+    
+}
+
 pub fn vector() {
     vector_creation();
+    vector_iteration();
+    different_element_type_vector();
 }
