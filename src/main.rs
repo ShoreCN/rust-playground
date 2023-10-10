@@ -11,6 +11,7 @@ mod elevator;
 mod method;
 mod generic;
 mod trait_test;
+mod vector;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -167,4 +168,6 @@ fn main() {
     generic::generic();
 
     trait_test::trait_test();
+
+    vector::vector();
 }
