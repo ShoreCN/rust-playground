@@ -1,3 +1,4 @@
+use crate::elevator;
 
 fn vector_creation() {
     // 预先声明类型
@@ -100,8 +101,31 @@ fn different_element_type_vector() {
     }
 }
 
+fn sort_vector() {
+    let mut v = vec!["ax", "qb", "c1", "ld", "eeee"];
+    v.sort_unstable();
+    println!("sorted v = {:?}", v);
+
+    // 通过自定义排序规则来对数组进行排序
+    let elvator1 = elevator::Elevator::new();
+    let elvator2 = elevator::Elevator{
+        current_floor: 0,
+        direction: elevator::Direction::Up,
+        destination: 10,
+        state: elevator::State::Moving,
+        current_weight: 0,
+        weight_limit: 1000,
+    };
+
+    // 根据当前所处楼层进行排序
+    let mut elevators = vec![elvator1, elvator2];
+    elevators.sort_by(|a, b| a.current_floor.cmp(&b.current_floor));
+    println!("sorted elevators = {:?}", elevators);
+}
+
 pub fn vector() {
     vector_creation();
     vector_iteration();
     different_element_type_vector();
+    sort_vector();
 }
