@@ -44,7 +44,7 @@ fn vector_iteration() {
 }
 
 fn different_element_type_vector() {
-    // 不同成员类型的元素
+    // 不同成员类型的数组
     enum SpreadsheetCell {
         Int(i32),
         Float(f64),
@@ -65,6 +65,39 @@ fn different_element_type_vector() {
         }
     }
     
+    // 通过特征对象来实现不同成员类型的数组
+    trait Shape {
+        fn area(&self) -> f64;
+    }
+
+    struct Circle {
+        radius: f64,
+    }
+
+    impl Shape for Circle {
+        fn area(&self) -> f64 {
+            self.radius * self.radius * std::f64::consts::PI
+        }
+    }
+
+    struct Square {
+        side: f64,
+    }
+
+    impl Shape for Square {
+        fn area(&self) -> f64 {
+            self.side * self.side
+        }
+    }
+
+    let shapes: Vec<Box<dyn Shape>> = vec![
+        Box::new(Circle { radius: 1.0 }),
+        Box::new(Square { side: 2.0 }),
+    ];
+
+    for shape in shapes {
+        println!("area = {}", shape.area());
+    }
 }
 
 pub fn vector() {
