@@ -62,6 +62,13 @@ fn error_propagation() -> Result<String, std::io::Error> {
     Ok(s)
 }
 
+// 链式调用透传error
+fn error_propagation2() -> Result<String, std::io::Error> {
+    let mut s = String::new();
+    std::fs::File::open("hello.txt")?.read_to_string(&mut s)?;
+    Ok(s)
+}
+
 pub fn error() {
     trigger_panic();
     handle_panic();
@@ -71,4 +78,10 @@ pub fn error() {
         Err(e) => panic!("error: {:?}", e),
     };
     println!("result = {:?}", result);
+
+    let result2 = match error_propagation2() {
+        Ok(s) => s,
+        Err(e) => panic!("error: {:?}", e),
+    };
+    println!("result2 = {:?}", result2);
 }
