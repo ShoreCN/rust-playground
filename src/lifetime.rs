@@ -26,6 +26,15 @@ impl<'a, T> ElevatorMaker<'a, T> {
     fn new(name: &T) -> ElevatorMaker<T> {
         ElevatorMaker { name, created_at: 0}
     }
+
+    fn update_name<'b>(&'a mut self, new_name: &'b T) -> &'b T 
+    where
+        'b: 'a, // 'b的生命周期必须比'a长
+    {
+        // println!("new name = {}", new_name);
+        self.name = new_name;
+        new_name
+    }
 }
 
 
@@ -35,11 +44,13 @@ pub fn lifetime() {
     let result = max(&item1, &item2);
     println!("{item1} and {item2} max is {result}");
     
-    let maker;
+    let mut maker;
     {
         let name = "Toshiba";
         maker = ElevatorMaker::new(&name);
         println!("maker name = {}", maker.name);
+        let new_name = "Mitsubishi";
+        println!("new maker name = {}", maker.update_name(&new_name));
     }
     // 结构体成员引用的变量已经超出了作用域, 虽然结构体本身还在作用域内, 但是结构体成员引用的变量已经超出了作用域, 所以继续使用结构体会报错
     // println!("maker created at {}", maker.created_at);
