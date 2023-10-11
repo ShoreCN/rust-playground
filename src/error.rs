@@ -17,8 +17,37 @@ fn handle_panic() {
 
     // expect的作用: 如果解析失败, 则会触发panic, 并且可以自定义panic的提示信息
     // 提示信息通常用于解释panic的原因
-    let ip: IpAddr = "999.1.1.1".parse().expect("parse ip failed");
+    let ip: IpAddr = "1.1.1.1".parse().expect("parse ip failed");
     println!("ip = {}", ip);
+
+    // match处理Result类型
+    let ip_addr: IpAddr = match "2.2.2.2".parse() {
+        Ok(ip) => ip,
+        Err(e) => panic!("parse ip failed: {:?}", e),
+    };
+    println!("ip_addr = {}", ip_addr);
+
+    // if let处理Result类型
+    let ip_addr: IpAddr = if let Ok(ip) = "3.3.3.3".parse() {
+        ip
+    } else {
+        panic!("parse ip failed");
+    };
+    println!("ip_addr = {}", ip_addr);
+
+    // 多层match嵌套处理多种类型的error
+    let f = std::fs::File::open("hello.txt");
+    let f = match f {
+        Ok(file) => file,
+        Err(e) => match e.kind() {
+            std::io::ErrorKind::NotFound => match std::fs::File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("create file failed: {:?}", e),
+            },
+            other_error => panic!("open file failed: {:?}", other_error),
+        },
+    };
+    println!("f = {:?}", f);
 }
 
 
