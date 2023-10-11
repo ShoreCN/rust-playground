@@ -37,6 +37,22 @@ impl<'a, T> ElevatorMaker<'a, T> {
     }
 }
 
+fn print_s(s: &str) {
+    println!("{}", s);
+}
+
+// 静态生命周期, 通过此方式声明的引用, 生命周期为整个程序的生命周期
+fn static_lifetime() {
+    let os;
+    {
+        let s: &'static str = "Hello, world!";
+        os = s;
+        print_s(s);
+    }
+    println!("after lifetime of s, str is still live: {os}");
+
+}
+
 
 pub fn lifetime() {
     let item1 = 1;
@@ -54,4 +70,6 @@ pub fn lifetime() {
     }
     // 结构体成员引用的变量已经超出了作用域, 虽然结构体本身还在作用域内, 但是结构体成员引用的变量已经超出了作用域, 所以继续使用结构体会报错
     // println!("maker created at {}", maker.created_at);
+
+    static_lifetime();
 }
