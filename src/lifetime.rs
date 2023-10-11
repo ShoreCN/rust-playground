@@ -18,13 +18,13 @@ fn max<'a>(a: &'a i32, b: &'a i32) -> &'a i32 {
 // 具有生命周期的结构体, 说明引用参数的生命周期需要比结构体的生命周期长
 struct ElevatorMaker<'a, T> {
     name: &'a T,
-    created_at: i64,
+    _created_at: i64,
 }
 
 // 为具有生命周期的结构体实现方法
 impl<'a, T> ElevatorMaker<'a, T> {
     fn new(name: &T) -> ElevatorMaker<T> {
-        ElevatorMaker { name, created_at: 0}
+        ElevatorMaker { name, _created_at: 0}
     }
 
     fn update_name<'b>(&'a mut self, new_name: &'b T) -> &'b T 

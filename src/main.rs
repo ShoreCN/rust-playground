@@ -14,6 +14,7 @@ mod trait_test;
 mod vector;
 mod hashmap;
 mod lifetime;
+mod error;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -175,4 +176,6 @@ fn main() {
     hashmap::hashmap();
 
     lifetime::lifetime();
+
+    error::error();
 }
