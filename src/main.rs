@@ -12,6 +12,7 @@ mod method;
 mod generic;
 mod trait_test;
 mod vector;
+mod hashmap;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -170,4 +171,5 @@ fn main() {
     trait_test::trait_test();
 
     vector::vector();
+    hashmap::hashmap();
 }
