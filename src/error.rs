@@ -50,8 +50,25 @@ fn handle_panic() {
     println!("f = {:?}", f);
 }
 
+use std::io::Read;
+
+// 透传error
+fn error_propagation() -> Result<String, std::io::Error> {
+    let mut f = std::fs::File::open("hello.txt")?;
+    println!("f = {:?}", f);
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    println!("s = {}", s);
+    Ok(s)
+}
 
 pub fn error() {
     trigger_panic();
     handle_panic();
+
+    let result = match error_propagation() {
+        Ok(s) => s,
+        Err(e) => panic!("error: {:?}", e),
+    };
+    println!("result = {:?}", result);
 }
