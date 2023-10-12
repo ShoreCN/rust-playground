@@ -15,6 +15,7 @@ mod vector;
 mod hashmap;
 mod lifetime;
 mod error;
+use rust_helloworld::{passenger, passenger_test};
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -178,4 +179,8 @@ fn main() {
     lifetime::lifetime();
 
     error::error();
+
+    // test lib import
+    passenger::behavior::call_elevator();
+    passenger_test();
 }
