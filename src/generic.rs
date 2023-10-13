@@ -1,4 +1,3 @@
-use std::array;
 
 use crate::elevator::{Elevator, ElevatorWeightController};
 
