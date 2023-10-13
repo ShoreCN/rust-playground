@@ -48,7 +48,8 @@ pub fn doc_block_comment(x: i32) -> i32 {
     x+1
 }
 
-
+pub mod doc;
+pub use doc::doc_panic;
 
 /** 
  乘客模块测试  

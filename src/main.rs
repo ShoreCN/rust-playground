@@ -17,6 +17,7 @@ mod lifetime;
 mod error;
 use rust_helloworld::{passenger, passenger_test};
 use rust_helloworld::passenger::behavior::call_elevator as call;
+use rust_helloworld::doc::doc_test;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -185,4 +186,6 @@ fn main() {
     passenger::behavior::call_elevator();
     passenger_test();
     call();
+
+    doc_test();
 }

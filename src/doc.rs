@@ -6,7 +6,7 @@
 /// # Examples
 /// ```
 /// let x = 1;
-/// let y = doc_comment(x);
+/// let y = rust_helloworld::doc_line_comment(x);
 /// assert_eq!(y, 2);
 /// ```
 pub fn doc_line_comment(x: i32) -> i32 {
@@ -22,7 +22,7 @@ pub fn doc_line_comment(x: i32) -> i32 {
     # Examples
     ```
     let x = 1;
-    let y = doc_block_comment(x);
+    let y = rust_helloworld::doc_block_comment(x);
     assert_eq!(y, 2);
     ```
  */
@@ -33,9 +33,38 @@ pub fn doc_block_comment(x: i32) -> i32 {
 
 
 
+/**
+ * # 文档注释中的panic处理
+ * function: `doc_panic`  
+ * input: `x<i32>`  
+ * output: `x+1`  
+ * # Examples
+ * ```
+ * let x = 1;
+ * let y = rust_helloworld::doc_panic(x);
+ * assert_eq!(y, 2);
+ * ```
+ * # Panics
+ * ```should_panic
+ * let x = -1;
+ * let y = rust_helloworld::doc_panic(x);
+ * assert_eq!(y, 2);
+ * ```
+ * 
+ */
+pub fn doc_panic(x: i32) -> i32 {
+    if x < 0 {
+        panic!("x < 0");
+    }
+    x+1
+}
+
+
+
 /// # Doc test
 pub fn doc_test() {
     //  line comment
+    doc_line_comment(1);
 
     /*
         block comment 
