@@ -65,6 +65,8 @@ pub fn doc_panic(x: i32) -> i32 {
 /// [`doc_line_comment`]
 /// [`doc_block_comment`]
 /// [`doc_panic`]
+#[doc(alias = "dir")]
+#[doc(alias = "docs")]
 pub fn doc_dir() {
 }
 
