@@ -60,6 +60,14 @@ pub fn doc_panic(x: i32) -> i32 {
 }
 
 
+/// # 通过目录功能测试文档注释中的跳转能力
+/// function: `doc_dir`
+/// [`doc_line_comment`]
+/// [`doc_block_comment`]
+/// [`doc_panic`]
+pub fn doc_dir() {
+}
+
 
 /// # Doc test
 pub fn doc_test() {
