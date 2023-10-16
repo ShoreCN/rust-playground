@@ -26,6 +26,23 @@ fn standard_print() {
 
     // error output
     eprintln!("error output: {}", "when error occurs");
+
+    // position parameter
+    println!(
+        "{0} is {1} and {0} is {2}",
+        "this", "a string", "another string"
+    );
+
+    // named parameter
+    println!(
+        "{subject} {verb} {object}",
+        subject = "the quick brown fox",
+        verb = "jumps over",
+        object = "the lazy dog"
+    );
+    
+    let pi = 3.1415926;
+    println!("pi is roughly {pi:.3}", pi = pi);
 }
 
 // 为外部类型实现Display特征, 通过impl newtype pattern来实现
