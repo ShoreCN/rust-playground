@@ -85,7 +85,39 @@ fn customise_print() {
     println!("customise struct output: {}", w);
 }
 
+fn output_format() {
+    let x = "format output";
+    let i = -123;
+    // width 
+    println!("{:15}!", x);
+    // width and precision
+    println!("{:15.7}!", i);
+    println!("{:.5}!", x);  // string truncation
+    // left align
+    println!("{:<15}!", x);
+    println!("{:<15}!", i);
+    // right align
+    println!("{:>15}!", x);
+    // center align
+    println!("{:^15}!", x);
+    // fill with any character
+    println!("{:*^20}!", x);
+    println!("{:+015}!", -i);
+
+    // binary, octal, hex
+    println!("binary: {:b}", i);
+    println!("octal: {:o}", i);
+    println!("lower hex: {:x}", i);
+    println!("upper hex: {:X}", i);
+    println!("with prefix hex: {:#x}", i);
+
+    // pointer
+    println!("pointer: {:p}", x.as_ptr());
+    
+}
+
 pub fn output() {
     standard_print();
     customise_print();
+    output_format();
 }
