@@ -18,6 +18,7 @@ mod error;
 use rust_helloworld::{passenger, passenger_test};
 use rust_helloworld::passenger::behavior::call_elevator as call;
 use rust_helloworld::doc::doc_test;
+use rust_helloworld::output::output;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -188,4 +189,6 @@ fn main() {
     call();
 
     doc_test();
+
+    output();
 }
