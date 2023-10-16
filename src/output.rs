@@ -1,5 +1,4 @@
 
-
 #[derive(Debug)]
 struct Time {
     hour: u8,
@@ -27,7 +26,25 @@ fn standard_print() {
 
     // error output
     eprintln!("error output: {}", "when error occurs");
-    
+}
+
+// 为外部类型实现Display特征, 通过impl newtype pattern来实现
+// failed to implement Display trait for Vec<String>, because it's not our own type
+// impl fmt::Display for Vec<String> {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         write!(f, "[{}]", self.join(", "))
+//     }
+// }
+
+use std::fmt;
+struct Wrapper(Vec<String>);
+impl fmt::Display for Wrapper {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[{}]", self.0.join(", "))
+    }
+}
+
+fn customise_print() {
     // 当一个类型实现了Display特征, 可以使用{}来输出, 实现了Debug特征, 可以使用{:?}来输出
     let s = Time {
         hour: 1,
@@ -46,8 +63,12 @@ fn standard_print() {
     };
     println!("customise struct output: {}", cs);
     println!("human readable customise struct output: {:#}", cs);
+
+    let w = Wrapper(vec![String::from("Elevator"), String::from("coming")]);
+    println!("customise struct output: {}", w);
 }
 
 pub fn output() {
     standard_print();
+    customise_print();
 }
