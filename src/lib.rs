@@ -74,3 +74,38 @@ pub fn passenger_test() {
 
 
 pub mod output;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_doc_line_comment() {
+        let x = 1;
+        let y = doc_line_comment(x);
+        assert_eq!(y, 2);
+    }
+
+    #[test]
+    fn test_doc_block_comment() {
+        let x = 1;
+        let y = doc_block_comment(x);
+        assert_eq!(y, 2);
+    }
+
+    #[test]
+    fn test_doc_panic() {
+        let x = 1;
+        let y = doc_panic(x);
+        assert_eq!(y, 2);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_doc_panic_should_panic() {
+        let x = -1;
+        let y = doc_panic(x);
+        assert_eq!(y, 2);
+    }
+
+}
