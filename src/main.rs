@@ -179,6 +179,7 @@ fn main() {
     vector::vector();
     hashmap::hashmap();
 
+    println!("\n**[Lifetime]**");
     lifetime::lifetime();
 
     error::error();

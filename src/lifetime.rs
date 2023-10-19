@@ -45,12 +45,29 @@ fn print_s(s: &str) {
 fn static_lifetime() {
     let os;
     {
-        let s: &'static str = "Hello, world!";
+        // let s: &'static str = "Hello, world!";
+        let s: &str = "Hello, world!";
         os = s;
         print_s(s);
     }
     println!("after lifetime of s, str is still live: {os}");
 
+    let name;
+    {
+        static NAME: &str = "Toshiba";
+        name = &NAME;
+        println!("static NAME = {}, ref name = {name}", NAME);
+    }
+    println!("after lifetime of NAME, str is still live: {name}");
+
+    // 如下例子无法通过编译, 因为引用的变量超出了作用域
+    // let r;
+    // {
+    //     let s = "REF STR";
+    //     r = &s;
+    //     println!("ref = {}", r);
+    // }
+    // println!("after lifetime of ref, str is still live: {r}");
 }
 
 
