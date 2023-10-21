@@ -39,6 +39,14 @@ fn cacher_test() {
     println!("v1 = {}, v2 = {}", v1, v2);
 }
 
+fn use_value_in_closure() {
+    let x = 4;
+    let equal_to_x = |z| z == x;
+    let y = 4;
+    println!("equal_to_x(y) = {}", equal_to_x(y));
+}
+
 pub fn closure() {
     cacher_test();
+    use_value_in_closure();
 }
