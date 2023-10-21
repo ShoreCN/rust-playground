@@ -80,8 +80,21 @@ fn use_value_in_closure() {
     println!("equal_to_x(y) = {}", equal_to_x(y));
 }
 
+fn factory_fn(base: i32) -> Box<dyn Fn(i32) -> i32> {
+    let num = base;
+    if num > 0 {
+        return Box::new(move |x| x + num);
+    } else {
+        return Box::new(move |x| x - num);
+    }
+}
+
 pub fn closure() {
     cacher_test();
     use_value_in_closure();
     fn_mut_closure();
+    let f = factory_fn(10);
+    println!("f(1) = {}", f(1));
+    let f2 = factory_fn(-20);
+    println!("f(2) = {}", f2(-1));
 }
