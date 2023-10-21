@@ -32,6 +32,18 @@ impl <T> Cacher<T>
     }
 }
 
+// 实现FnMut的闭包
+fn fn_mut_closure() {
+    let mut num = 5;
+    let mut add_num = |x: u32| num += x;
+    add_num(5);
+    println!("num = {}", num);
+
+    // 无法通过编译, 因为没有声明mut, 闭包默认是不可变的
+    // let add_num2 = |x: u32| num += x;
+    // add_num2(5);
+}
+
 fn cacher_test() {
     let mut cacher = Cacher::new(|a| a);
     let v1 = cacher.value(1);
@@ -49,4 +61,5 @@ fn use_value_in_closure() {
 pub fn closure() {
     cacher_test();
     use_value_in_closure();
+    fn_mut_closure();
 }
