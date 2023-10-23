@@ -34,3 +34,9 @@ pub struct ElevatorWeightController<T> {
     pub current_weight: T,
     pub weight_limit: T,
 }
+
+pub enum FloorType {
+    Normal,
+    Top,
+    Bottom,
+}
