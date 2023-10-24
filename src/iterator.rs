@@ -42,6 +42,18 @@ impl ToString for FloorType {
     }
 }
 
+fn filter_price(floors: Vec<FloorType>, low_price: i32, high_price: i32) -> Vec<FloorType> {
+    // 这里不能使用iter(), 因为iter()方法返回的是一个引用, 不能修改vector的值
+    floors.into_iter().filter(|floor| {
+        let price = match floor {
+            FloorType::Bottom => 100,
+            FloorType::Normal => 200,
+            FloorType::Top => 300,
+        };
+        price >= low_price && price <= high_price
+    }).collect()
+}
+
 fn iter_usage() {
     let mut floors = vec![FloorType::Bottom, FloorType::Normal, FloorType::Top];
     // map是一个迭代器适配器, 会创建一个新的迭代器
@@ -54,6 +66,10 @@ fn iter_usage() {
     let prices = vec![100, 200, 300];
     let floor_price_hashmap: HashMap<_, _> = floor_names.iter().zip(prices.iter()).collect();
     println!("floor_price_hashmap = {:?}", floor_price_hashmap);
+    
+    println!("floors = {:?}", floors);
+    let filtered_floors = filter_price(floors, 150, 250);
+    println!("filtered_floors = {:?}", filtered_floors);
 }
 
 pub fn iterator(){

@@ -35,6 +35,7 @@ pub struct ElevatorWeightController<T> {
     pub weight_limit: T,
 }
 
+#[derive(Debug)]
 pub enum FloorType {
     Normal,
     Top,
