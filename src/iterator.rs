@@ -55,7 +55,7 @@ fn filter_price(floors: Vec<FloorType>, low_price: i32, high_price: i32) -> Vec<
 }
 
 fn iter_usage() {
-    let mut floors = vec![FloorType::Bottom, FloorType::Normal, FloorType::Top];
+    let floors = vec![FloorType::Bottom, FloorType::Normal, FloorType::Top];
     // map是一个迭代器适配器, 会创建一个新的迭代器
     // map方法不会消耗原vector, 所以可以继续使用
     // map方法是惰性的, 只有在使用时才会执行, 所以在map方法使用之后再调用collect方法(消费者适配器)才算是进行了执行
@@ -72,7 +72,40 @@ fn iter_usage() {
     println!("filtered_floors = {:?}", filtered_floors);
 }
 
+struct FloorIterator {
+    current_floor: u8,
+    total_floors: u8,
+}
+
+impl Iterator for FloorIterator {
+    type Item = u8;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current_floor < self.total_floors {
+            self.current_floor += 1;
+            Some(self.current_floor)
+        } else {
+            None
+        }
+    }
+}
+
+fn go_to_floor(floor_iterator: FloorIterator, floor_num: u8) {
+    floor_iterator.into_iter().filter(|floor| *floor == floor_num).map(|floor| {
+        println!("Go to floor {}", floor);
+    }).collect()
+}
+
+fn customized_iterator() {
+    let floor_iterator = FloorIterator {
+        current_floor: 0,
+        total_floors: 10,
+    };
+    go_to_floor(floor_iterator, 5);
+}
+
 pub fn iterator(){
     array_iter();
     iter_usage();
+    customized_iterator();
 }
