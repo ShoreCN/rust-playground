@@ -22,6 +22,7 @@ use rust_helloworld::output::output;
 mod closure;
 mod iterator;
 mod transfer;
+mod data_type;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -204,4 +205,7 @@ fn main() {
 
     println!("\n**[Transfer]**");
     transfer::transfer();
+
+    println!("\n**[Data Type]**");
+    data_type::data_type();
 }
