@@ -21,6 +21,7 @@ use rust_helloworld::doc::doc_test;
 use rust_helloworld::output::output;
 mod closure;
 mod iterator;
+mod transfer;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -200,4 +201,7 @@ fn main() {
 
     println!("\n**[Iterator]**");
     iterator::iterator();
+
+    println!("\n**[Transfer]**");
+    transfer::transfer();
 }
