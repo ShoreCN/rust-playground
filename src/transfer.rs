@@ -32,6 +32,20 @@ fn type_transfer() {
     
 }
 
+fn sample(x: i32) -> i32 {
+    x
+}
+
+fn transmute() {
+    // 将函数转换为函数指针
+    let f = sample as *const ();
+    let function = unsafe {
+        std::mem::transmute::<*const (), fn(i32) -> i32>(f)
+    };
+    println!("function(1) = {}", function(1));
+}
+
 pub fn transfer() {
     type_transfer();
+    transmute();
 }
