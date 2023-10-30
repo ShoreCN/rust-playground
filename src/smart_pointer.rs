@@ -17,8 +17,6 @@ trait DisplayContent {
     fn display(&self);
 }
 
-use std::fmt::Display;
-
 use crate::elevator::{Elevator, ElevatorWeightController};
 impl DisplayContent for Elevator {
     fn display(&self) {
@@ -30,6 +28,20 @@ impl DisplayContent for ElevatorWeightController<u32> {
     fn display(&self) {
         println!("The elevator weight limit is {} kg, current weight is {} kg.", self.weight_limit, self.current_weight);
     }
+}
+
+#[derive(Debug)]
+struct GlobalConfig {
+    pub name: String,
+    pub value: String,
+}
+
+fn get_global_usage_var() -> &'static GlobalConfig {
+    let mut var = GlobalConfig {
+        name: String::from("global_usage_var_name"),
+        value: String::from("global_usage_var_value"),
+    };
+    Box::leak(Box::new(var))
 }
 
 fn smart_pointer_box() {
@@ -54,6 +66,9 @@ fn smart_pointer_box() {
     for obj in display_obj_arr {
         obj.display();
     }
+
+    let global_config = get_global_usage_var();
+    println!("global_config_name = {}, global_config_value = {}", global_config.name, global_config.value);
 }
 
 pub fn smart_pointer() {
