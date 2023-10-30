@@ -23,6 +23,7 @@ mod closure;
 mod iterator;
 mod transfer;
 mod data_type;
+mod smart_pointer;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -208,4 +209,7 @@ fn main() {
 
     println!("\n**[Data Type]**");
     data_type::data_type();
+
+    println!("\n**[Smart Pointer]**");
+    smart_pointer::smart_pointer();
 }
