@@ -90,9 +90,24 @@ impl Deref for FloorButton {
     }
 }
 
+impl Drop for FloorButton {
+    fn drop(&mut self) {
+        println!("FloorButton {} is dropped.", self.0);
+    }
+}
+
 fn customize_smart_pointer() {
     let floor_button = FloorButton::new(10);
     println!("floor_button = {}", *floor_button);
+
+    // error: 无法直接调用对象的drop方法
+    // floor_button.drop();
+
+    // 通过std::mem::drop可以调用对象的drop方法
+    drop(floor_button);
+
+    // panic: borrow of moved value: `floor_button`
+    // println!("use floor_button after drop. floor_button = {}", *floor_button);
 }
 
 pub fn smart_pointer() {
