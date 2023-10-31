@@ -71,6 +71,31 @@ fn smart_pointer_box() {
     println!("global_config_name = {}, global_config_value = {}", global_config.name, global_config.value);
 }
 
+
+use std::ops::Deref;
+
+struct FloorButton(u32);
+
+impl FloorButton {
+    fn new(floor: u32) -> FloorButton {
+        FloorButton(floor)
+    }
+}
+
+impl Deref for FloorButton {
+    type Target = u32;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+fn customize_smart_pointer() {
+    let floor_button = FloorButton::new(10);
+    println!("floor_button = {}", *floor_button);
+}
+
 pub fn smart_pointer() {
     smart_pointer_box();
+    customize_smart_pointer();
 }
