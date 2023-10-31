@@ -104,6 +104,7 @@ fn customize_smart_pointer() {
     // floor_button.drop();
 
     // 通过std::mem::drop可以调用对象的drop方法
+    // 本质上是通过将参数的所有权转移给drop函数, 从而使得floor_button对象无法再被使用, 离开作用域后会被自动drop
     drop(floor_button);
 
     // panic: borrow of moved value: `floor_button`
