@@ -72,7 +72,7 @@ fn smart_pointer_box() {
 }
 
 
-use std::ops::Deref;
+use std::{ops::Deref, rc::Rc};
 
 struct FloorButton(u32);
 
@@ -111,7 +111,24 @@ fn customize_smart_pointer() {
     // println!("use floor_button after drop. floor_button = {}", *floor_button);
 }
 
+fn reference_counting() {
+    let e1 = Rc::new(Elevator::new());
+    println!("e1 counting = {}", Rc::strong_count(&e1));
+    
+    let e2 = Rc::clone(&e1);
+    println!("e2 counting = {}", Rc::strong_count(&e2));
+    println!("e1 counting = {}", Rc::strong_count(&e1));
+
+    {
+        let e3 = Rc::clone(&e1);
+        println!("e3 counting = {}", Rc::strong_count(&e3));
+    }
+    // 变量离开作用域后, 引用计数会减1
+    println!("e1 counting = {}", Rc::strong_count(&e1));
+}
+
 pub fn smart_pointer() {
     smart_pointer_box();
     customize_smart_pointer();
+    reference_counting();
 }
