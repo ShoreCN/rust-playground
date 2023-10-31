@@ -111,6 +111,10 @@ fn customize_smart_pointer() {
     // println!("use floor_button after drop. floor_button = {}", *floor_button);
 }
 
+struct ElevatorPassenger {
+    elevator_number: Rc<u8>
+}
+
 fn reference_counting() {
     let e1 = Rc::new(Elevator::new());
     println!("e1 counting = {}", Rc::strong_count(&e1));
@@ -125,7 +129,30 @@ fn reference_counting() {
     }
     // 变量离开作用域后, 引用计数会减1
     println!("e1 counting = {}", Rc::strong_count(&e1));
+
+    // Rc是指向变量的不可变引用, 所以无法修改变量的值
+    // e1.current_floor = 2;
+
+    let elevator_num = 1;
+    let p1 = ElevatorPassenger {
+        elevator_number: Rc::new(elevator_num),
+    };
+    let p2 = ElevatorPassenger {
+        elevator_number: Rc::clone(&p1.elevator_number),
+    };
+    println!(
+        "p1 elevator_number = {}, p2 elevator_number = {}, num{} elevator passenger count = {}", 
+        p1.elevator_number, 
+        p2.elevator_number, 
+        elevator_num, 
+        Rc::strong_count(&p1.elevator_number)
+    );
+
+    // 当所有对Rc的引用离开作用域后, 引用计数会减1, 当引用计数为0时, Rc会自动调用drop方法, 从而释放内存
+
+    // Rc<T>只能用于单线程, 如果需要在多线程中共享数据, 可以使用Arc<T>
 }
+
 
 pub fn smart_pointer() {
     smart_pointer_box();
