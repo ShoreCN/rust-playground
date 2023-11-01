@@ -165,6 +165,8 @@ fn arc() {
         thread::spawn(move || {
             println!("content in the thread {:?} is \"{}\"", thread::current().id(), thread_s);
         });
+        // 注意线程回调函数中的参数是move的, 所以这里无法再使用thread_s
+        // println!("content in the thread {:?} is \"{}\"", thread::current().id(), thread_s);
     }
     println!("counting = {}", Arc::strong_count(&s));
     // sleep, 主线程结束之后, 子线程可能还没有执行完, 从而导致子线程无法打印内容
@@ -189,7 +191,6 @@ fn arc() {
     }
     println!("counting = {}", Arc::strong_count(&s));
     println!("time cost = {:?}", time_cost.elapsed());
-    
 }
 
 pub fn smart_pointer() {
