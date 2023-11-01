@@ -167,8 +167,29 @@ fn arc() {
         });
     }
     println!("counting = {}", Arc::strong_count(&s));
-    // sleep
+    // sleep, 主线程结束之后, 子线程可能还没有执行完, 从而导致子线程无法打印内容
     thread::sleep(std::time::Duration::from_millis(200));
+
+    // 更好的选择是在主线程使用join方法, 等待子线程执行完毕
+    let s = Arc::new(String::from("cross thread string 2"));
+    let time_cost = std::time::Instant::now();
+    let mut threads = vec![];
+    for _ in 0..3 {
+        let thread_s = Arc::clone(&s);
+        let thread = thread::spawn(move || {
+            println!("content in the thread {:?} is \"{}\"", thread::current().id(), thread_s);
+            thread::sleep(std::time::Duration::from_millis(100));
+        });
+        threads.push(thread);
+        // thread.join().unwrap(); // 在这里直接使用join, 会导致线程串行执行, 无法体现多线程的优势
+        println!("time cost = {:?}", time_cost.elapsed());
+    }
+    for thread in threads {
+        thread.join().unwrap();
+    }
+    println!("counting = {}", Arc::strong_count(&s));
+    println!("time cost = {:?}", time_cost.elapsed());
+    
 }
 
 pub fn smart_pointer() {
