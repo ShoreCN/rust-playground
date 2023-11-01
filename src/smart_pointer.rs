@@ -247,6 +247,45 @@ fn rc_and_ref_cell_combination() {
     );
 }
 
+// 只有部分字段可变的电梯乘客结构体
+// 电梯乘客的姓名是不可变的, 但是年龄和乘坐的电梯编号是可变的
+#[derive(Debug)]
+struct PartiallyMutableElevatorPassenger {
+    name: String,
+    age: Cell<u8>,
+    elevator_number: Rc<Cell<u8>>,
+}
+
+impl PartiallyMutableElevatorPassenger {
+    fn new(name: String, age: u8, elevator_number: u8) -> PartiallyMutableElevatorPassenger {
+        PartiallyMutableElevatorPassenger {
+            name,
+            age: Cell::new(age),
+            elevator_number: Rc::new(Cell::new(elevator_number)),
+        }
+    }
+
+    fn update_age(&self, age: u8) {
+        self.age.set(age);
+    }
+
+    fn update_elevator_number(&self, elevator_number: u8) {
+        self.elevator_number.set(elevator_number);
+    }
+}
+
+fn partially_mutable_struct() {
+    let p = PartiallyMutableElevatorPassenger::new(String::from("Tom"), 20, 1);
+    println!("p = {:?}", p);
+    p.update_age(21);
+    p.update_elevator_number(2);
+    println!("p = {:?}", p);
+
+    println!("p.name = {}", p.name);
+    // cannot mutate immutable variable
+    // p.name = String::from("Jerry");
+}
+
 pub fn smart_pointer() {
     smart_pointer_box();
     customize_smart_pointer();
@@ -254,4 +293,5 @@ pub fn smart_pointer() {
     arc();
     modify_immutable_variable();
     rc_and_ref_cell_combination();
+    partially_mutable_struct();
 }
