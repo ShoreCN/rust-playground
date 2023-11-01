@@ -17,7 +17,7 @@ trait DisplayContent {
     fn display(&self);
 }
 
-use crate::elevator::{Elevator, ElevatorWeightController};
+use crate::elevator::{Elevator, ElevatorWeightController, self};
 impl DisplayContent for Elevator {
     fn display(&self) {
         println!("The elevator now is {:?}, current floor is {}, current direction is {:?}, current destination is {}, current weight is {} kg, weight limit is {} kg.", self.state, self.current_floor, self.direction, self.destination, self.current_weight, self.weight_limit);
@@ -223,6 +223,29 @@ fn modify_immutable_variable() {
     // println!("r1 = {}, r2 = {}", r1, r2);
 }
 
+fn rc_and_ref_cell_combination() {
+    // Rc和RefCell可以组合使用, 用于共享可变数据
+    // Rc用于共享所有权, RefCell用于共享可变借用
+    let elevator_num = Rc::new(RefCell::new(1));
+    let p1_num = Rc::clone(&elevator_num);
+    let p2_num = Rc::clone(&elevator_num);
+    println!(
+        "p1 elevator_number = {}, p2 elevator_number = {}, elevator passenger count = {}", 
+        p1_num.borrow(),
+        p2_num.borrow(),
+        Rc::strong_count(&elevator_num)
+    );
+    
+    let new_number = 2;
+    println!("change the elevator number to {new_number}");
+    *elevator_num.borrow_mut() = new_number;
+    println!(
+        "p1 elevator_number = {}, p2 elevator_number = {}, elevator passenger count = {}", 
+        p1_num.borrow(),
+        p2_num.borrow(),
+        Rc::strong_count(&elevator_num)
+    );
+}
 
 pub fn smart_pointer() {
     smart_pointer_box();
@@ -230,4 +253,5 @@ pub fn smart_pointer() {
     reference_counting();
     arc();
     modify_immutable_variable();
+    rc_and_ref_cell_combination();
 }
