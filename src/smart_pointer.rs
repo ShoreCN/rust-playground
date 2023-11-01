@@ -193,9 +193,41 @@ fn arc() {
     println!("time cost = {:?}", time_cost.elapsed());
 }
 
+use std::cell::{Cell, RefCell};
+
+
+fn modify_immutable_variable() {
+    // Rust中的Cell和RefCell可以在不可变变量中修改值
+    let m = Cell::new(1);
+    println!("old m = {}", m.get());
+    m.set(2);
+    println!("new m = {}", m.get());
+
+    // 因为Cell只能存储Copy类型的值, 所以下面的代码无法通过编译
+    // let m2 = Cell::new(String::from("hello"));
+    // println!("old m2 = {}", m2.get());
+    // m2.set(String::from("world"));
+    // println!("new m2 = {}", m2.get());
+
+    // 相比Cell, 更常用的是RefCell, 因为Cell只能存储Copy类型的值, 而RefCell可以存储任意类型的值
+    let rc = RefCell::new(String::from("hello"));
+    println!("old rc = {}", rc.borrow());
+    *rc.borrow_mut() = String::from("world");
+    println!("new rc = {}", rc.borrow());
+
+    // 然而RefCell只是将可变借用的检查推迟到了运行时
+    // 所以如果在运行时发生了可变借用的冲突(例如下面例子中的多次可变借用), 还是会导致程序崩溃panic
+    // let rc2 = RefCell::new(String::from("hello"));
+    // let r1 = rc2.borrow_mut();
+    // let r2 = rc2.borrow_mut(); // panic: already borrowed: BorrowMutError
+    // println!("r1 = {}, r2 = {}", r1, r2);
+}
+
+
 pub fn smart_pointer() {
     smart_pointer_box();
     customize_smart_pointer();
     reference_counting();
     arc();
+    modify_immutable_variable();
 }
