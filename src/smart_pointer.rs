@@ -153,9 +153,27 @@ fn reference_counting() {
     // Rc<T>只能用于单线程, 如果需要在多线程中共享数据, 可以使用Arc<T>
 }
 
+use std::sync::Arc;
+use std::thread;
+
+fn arc() {
+    // 跨线程操作时, 需要使用Arc<T>
+
+    let s = Arc::new(String::from("cross thread string"));
+    for _ in 0..3 {
+        let thread_s = Arc::clone(&s);
+        thread::spawn(move || {
+            println!("content in the thread {:?} is \"{}\"", thread::current().id(), thread_s);
+        });
+    }
+    println!("counting = {}", Arc::strong_count(&s));
+    // sleep
+    thread::sleep(std::time::Duration::from_millis(200));
+}
 
 pub fn smart_pointer() {
     smart_pointer_box();
     customize_smart_pointer();
     reference_counting();
+    arc();
 }
