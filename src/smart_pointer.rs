@@ -286,6 +286,54 @@ fn partially_mutable_struct() {
     // p.name = String::from("Jerry");
 }
 
+// 如果需要循环引用时, 直接使用Rc<T>会导致内存溢出问题, 所以需要使用Weak<T>
+// 其作用是弱引用, 不会增加引用计数, 也不会阻止被引用对象的释放
+use std::rc::Weak;
+
+struct Class {
+    name: String,
+    students: RefCell<Vec<Weak<Student>>>,
+}
+
+struct Student {
+    name: String,
+    class: Weak<Class>,
+}
+
+fn weak_reference() {
+    let class = Rc::new(Class {
+        name: String::from("class 1"),
+        students: RefCell::new(vec![]),
+    });
+
+    let student1 = Rc::new(Student {
+        name: String::from("student 1"),
+        class: Rc::downgrade(&class)
+    });
+    let student2 = Rc::new(Student {
+        name: String::from("student 2"),
+        class: Rc::downgrade(&class)
+    });
+
+    // 通过RefCell可以修改不可变变量的值
+    class.students.borrow_mut().push(Rc::downgrade(&student1));
+    class.students.borrow_mut().push(Rc::downgrade(&student2));
+
+    println!("student1 strong count = {}, weak count = {}", Rc::strong_count(&student1), Rc::weak_count(&student1));
+    println!("student2 strong count = {}, weak count = {}", Rc::strong_count(&student2), Rc::weak_count(&student2));
+    println!("class strong count = {}, weak count = {}", Rc::strong_count(&class), Rc::weak_count(&class));
+
+    // 通过weak_count可以获取弱引用的数量
+    // 通过upgrade方法可以将Weak<T>转换为Option<Rc<T>>
+    // 通过unwrap方法可以获取Option中的值
+    println!("class name = {}, students list:", class.name);
+    for student in class.students.borrow().iter() {
+        println!("student name = {}", student.upgrade().unwrap().name);
+    }
+}
+
+
+
 pub fn smart_pointer() {
     smart_pointer_box();
     customize_smart_pointer();
@@ -294,4 +342,6 @@ pub fn smart_pointer() {
     modify_immutable_variable();
     rc_and_ref_cell_combination();
     partially_mutable_struct();
+
+    weak_reference();
 }
