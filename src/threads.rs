@@ -14,7 +14,7 @@ impl Elevator {
         self.current_floor = random_floor;
         self.state = State::Moving;
         INIT_WEIGHT.with(|weight| {
-            self.current_weight = *weight.borrow();
+            self.current_weight = *weight.borrow() + elevator_num as u32 * 100;
         });
         println!("elevator[{elevator_num}] go to floor {}", self.current_floor);
     }
@@ -48,6 +48,12 @@ fn elevators_process(){
     for handler in threads {
         handler.join().unwrap();
     }
+
+    // 子线程使用完线程局部变量之后再查看一下线程局部变量的值
+    // 可以看出线程局部变量的值并没有被修改, 在不同的线程中, 线程局部变量的值是独立的
+    INIT_WEIGHT.with(|weight| {
+        println!("final weight = {}", *weight.borrow());
+    });
 }
 
 pub fn threads() {
