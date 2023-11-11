@@ -24,6 +24,7 @@ mod iterator;
 mod transfer;
 mod data_type;
 mod smart_pointer;
+mod threads;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -212,4 +213,7 @@ fn main() {
 
     println!("\n**[Smart Pointer]**");
     smart_pointer::smart_pointer();
+
+    println!("\n**[Threads]**");
+    threads::threads();
 }
