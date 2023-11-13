@@ -46,6 +46,9 @@ fn elevators_process(){
             // 如果goto_random_floor()返回的是Ok, 则说明电梯已经到达指定楼层, 通过消息通道通知主线程
             if let Ok(msg) = r {
                 multi_tx.send(msg).unwrap();
+                // 发送之后对象的所有权会被转移, 所以这里不能再次使用
+                // 除非所发送对象是实现了Copy trait的类型, 例如int之类
+                // println!("msg is {msg}");
             }
             // 为了让所有的电梯状态打印都在最后, 使用线程屏障控制线程执行到此处进行等待
             thread_barrier.wait();
