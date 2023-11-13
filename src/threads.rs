@@ -80,8 +80,12 @@ fn elevators_process(){
     });
 }
 
+// 线程同步发送消息
 fn thread_sync_msg() {
     println!("thread sync msg");
+    // bound参数表示消息通道中最多可以存储(即缓存)的消息数量, 当消息数量超过bound时, send()方法才会开始阻塞
+    // 如果bound=0, 那么send方法不会阻塞, 效果类似于异步消息通道
+    // 通过设置bound参数可以控制消息通道内的消息数量, 防止消息通道内的消息过多导致内存占用过大
     let (tx, rx) = mpsc::sync_channel(0);
     
     let mut elevator = Elevator::new();
