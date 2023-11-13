@@ -3,6 +3,7 @@ use crate::elevator::{Elevator, State};
 use rand;
 use std::sync::{Arc, Barrier, mpsc};
 use std::cell::RefCell;
+use std::time::Duration;
 
 // 线程局部变量
 thread_local!(static INIT_WEIGHT: RefCell<u32> = RefCell::new(1000));
@@ -58,9 +59,10 @@ fn elevators_process(){
     }
 
     // 等待所有线程结束
-    for handler in threads {
-        handler.join().unwrap();
-    }
+    // 使用了线程屏障, 所以这里可以不用等待
+    // for handler in threads {
+    //     handler.join().unwrap();
+    // }
 
     // 所有的tx都drop掉之后, 使用for循环接收消息通道中的消息才会结束
     // tx的clone在线程中会被drop掉, 所以这里只需要drop掉主线程中的tx即可
@@ -78,6 +80,30 @@ fn elevators_process(){
     });
 }
 
+fn thread_sync_msg() {
+    println!("thread sync msg");
+    let (tx, rx) = mpsc::sync_channel(0);
+    
+    let mut elevator = Elevator::new();
+    let handler = thread::spawn(move || {
+        let r = elevator.goto_random_floor(0);
+        if let Ok(msg) = r {
+            println!("Ready to send message. [triggered before sync send]");
+            tx.send(msg).unwrap();
+            println!("Elevator has sent message. [triggered after sync send]");
+        }
+    });
+
+    println!("Ready to receive message. [triggered before sync receive]");
+    thread::sleep(Duration::from_secs(1));
+
+    let received = rx.recv().unwrap();
+    println!("Message received >> {}", received);
+
+    handler.join().unwrap();
+}
+
 pub fn threads() {
     elevators_process();
+    thread_sync_msg();
 }
