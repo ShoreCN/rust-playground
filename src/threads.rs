@@ -107,7 +107,37 @@ fn thread_sync_msg() {
     handler.join().unwrap();
 }
 
+// 通过枚举类型在消息发送中传递不同类型的数据
+// 缺点: 因为枚举类型在内存中的数据对齐方式是按照最大成员的大小进行对齐的, 所以会造成内存空间的浪费
+enum Msg {
+    Text(String),
+    Code(u32),
+}
+
+fn different_data_send() {
+    let (tx, rx) = mpsc::channel();
+    let mut elevator = Elevator::new();
+    let handler = thread::spawn(move || {
+        let r = elevator.goto_random_floor(0);
+        if let Ok(msg) = r {
+            tx.send(Msg::Code(200)).unwrap();
+            tx.send(Msg::Text(msg)).unwrap();
+        }
+    });
+
+    // let received = rx.recv().unwrap();
+    for received in rx {
+        match received {
+            Msg::Text(msg) => println!("Message received >> {}", msg),
+            Msg::Code(i) => println!("Message received >> Code[{}]", i),
+        }
+    }
+
+    handler.join().unwrap();
+}
+
 pub fn threads() {
     elevators_process();
     thread_sync_msg();
+    different_data_send();
 }
