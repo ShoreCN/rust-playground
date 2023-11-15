@@ -1,7 +1,7 @@
 use std::thread;
 use crate::elevator::{Elevator, State};
 use rand;
-use std::sync::{Arc, Barrier, mpsc};
+use std::sync::{Arc, Barrier, mpsc, Mutex};
 use std::cell::RefCell;
 use std::time::Duration;
 
@@ -9,7 +9,7 @@ use std::time::Duration;
 thread_local!(static INIT_WEIGHT: RefCell<u32> = RefCell::new(1000));
 
 impl Elevator {
-    fn goto_random_floor(&mut self, elevator_num: u8) -> Result<String, &'static str> {
+    fn goto_random_floor(&mut self, elevator_num: u8) -> Result<(u8, String), &'static str> {
         println!("elevator[{elevator_num}] current floor is {}", self.current_floor);
         let random_floor = rand::random::<u8>() % 33 + 1;
         self.current_floor = random_floor;
@@ -18,7 +18,7 @@ impl Elevator {
             self.current_weight = *weight.borrow() + elevator_num as u32 * 100;
         });
         println!("elevator[{elevator_num}] go to floor {}", random_floor);
-        Ok(format!("Nofitication: Elevator[{}] arrived {}.", elevator_num, random_floor))
+        Ok((random_floor, format!("Nofitication: Elevator[{}] arrived {}.", elevator_num, random_floor)))
     }
 }
 
@@ -27,6 +27,7 @@ fn elevators_process(){
     let mut threads = Vec::new();
     let threads_num = 3;
     let barrier = Arc::new(Barrier::new(threads_num));
+    let floor_counter = Arc::new(Mutex::new(0));
 
     INIT_WEIGHT.with(|weight| {
         // 变更线程局部变量的值
@@ -42,11 +43,17 @@ fn elevators_process(){
         let thread_barrier = barrier.clone();
         let multi_tx = tx.clone();
         let mut elevator = Elevator::new();
+        let floor_counter = floor_counter.clone();
         let handler = thread::spawn(move || {
             let r = elevator.goto_random_floor(i);
             // 如果goto_random_floor()返回的是Ok, 则说明电梯已经到达指定楼层, 通过消息通道通知主线程
-            if let Ok(msg) = r {
+            if let Ok((dst_floor, msg)) = r {
                 multi_tx.send(msg).unwrap();
+                
+                // 通过锁来控制多个线程对同一个变量的访问
+                let mut counter = floor_counter.lock().unwrap();
+                *counter += dst_floor;
+
                 // 发送之后对象的所有权会被转移, 所以这里不能再次使用
                 // 除非所发送对象是实现了Copy trait的类型, 例如int之类
                 // println!("msg is {msg}");
@@ -78,6 +85,8 @@ fn elevators_process(){
     INIT_WEIGHT.with(|weight| {
         println!("final weight = {}", *weight.borrow());
     });
+
+    println!("floor counter = {}", *floor_counter.lock().unwrap());
 }
 
 // 线程同步发送消息
@@ -101,7 +110,7 @@ fn thread_sync_msg() {
     println!("Ready to receive message. [triggered before sync receive]");
     thread::sleep(Duration::from_secs(1));
 
-    let received = rx.recv().unwrap();
+    let (_, received) = rx.recv().unwrap();
     println!("Message received >> {}", received);
 
     handler.join().unwrap();
@@ -119,7 +128,7 @@ fn different_data_send() {
     let mut elevator = Elevator::new();
     let handler = thread::spawn(move || {
         let r = elevator.goto_random_floor(0);
-        if let Ok(msg) = r {
+        if let Ok((_, msg)) = r {
             tx.send(Msg::Code(200)).unwrap();
             tx.send(Msg::Text(msg)).unwrap();
         }
