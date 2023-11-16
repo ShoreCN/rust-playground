@@ -147,6 +147,7 @@ fn different_data_send() {
     handler.join().unwrap();
 }
 
+// 当多个线程都要进行数据读取时, 可以使用RwLock来进行读取, 这样可以提高效率
 fn rwlock_test() {
     let lock = RwLock::new(5);
     {
