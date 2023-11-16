@@ -86,7 +86,9 @@ fn elevators_process(){
         println!("final weight = {}", *weight.borrow());
     });
 
-    println!("floor counter = {}", *floor_counter.lock().unwrap());
+    // 使用try_lock()方法来获取锁, 如果锁已经被其他线程获取, 则返回错误
+    // 该方法不会阻塞当前线程
+    println!("floor counter = {}", *floor_counter.try_lock().unwrap());
 }
 
 // 线程同步发送消息
