@@ -1,7 +1,7 @@
 use std::thread;
 use crate::elevator::{Elevator, State};
 use rand;
-use std::sync::{Arc, Barrier, mpsc, Mutex};
+use std::sync::{Arc, Barrier, mpsc, Mutex, RwLock};
 use std::cell::RefCell;
 use std::time::Duration;
 
@@ -147,8 +147,39 @@ fn different_data_send() {
     handler.join().unwrap();
 }
 
+fn rwlock_test() {
+    let lock = RwLock::new(5);
+    {
+        let r1 = lock.read().unwrap();
+        println!("r1 = {}", r1);
+        let r2 = lock.read().unwrap();
+        println!("r2 = {}", r2);
+        // println!("r1 = {}, r2 = {}", r1, r2);
+
+        // 已经获取了读锁的线程, 不能再获取写锁, 否则会造成死锁
+        // let mut m1 = lock.try_write().unwrap();
+        // *m1 += 1;
+        // println!("m1 = {}", m1);
+    }
+    {
+        let mut w = lock.write().unwrap();
+        *w += 1;
+        println!("w = {}", w);
+
+        // 已经获取了写锁的线程, 不能再获取读锁或者写锁, 否则都会造成死锁
+        // thread 'main' panicked at 'rwlock read lock would result in deadlock'
+        // let mut w2 = lock.write().unwrap();
+        // *w2 += 1;
+        // println!("w2 = {}", w2);
+
+        // let r1 = lock.read();
+        // println!("r1 = {:?}", r1);
+    }
+}
+
 pub fn threads() {
     elevators_process();
     thread_sync_msg();
     different_data_send();
+    rwlock_test();
 }
