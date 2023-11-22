@@ -228,6 +228,7 @@ fn condvar_usage() {
     println!("counter = {}", *counter);
     println!("main process end...");
 
+    handler.join().unwrap();
 }
 
 pub fn threads() {
