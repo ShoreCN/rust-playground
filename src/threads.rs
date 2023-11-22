@@ -1,7 +1,7 @@
 use std::thread;
 use crate::elevator::{Elevator, State};
 use rand;
-use std::sync::{Arc, Barrier, mpsc, Mutex, RwLock};
+use std::sync::{Arc, Barrier, mpsc, Mutex, RwLock, Condvar};
 use std::cell::RefCell;
 use std::time::Duration;
 
@@ -178,9 +178,62 @@ fn rwlock_test() {
     }
 }
 
+// 通过条件变量来控制线程之间的执行顺序
+// 例如本例通过CondVar来实现执行顺序:
+// 0. 子线程业务执行;
+// 1. 主线程业务执行;
+// 2. 子线程收尾;
+// 3. 主线程收尾;
+fn condvar_usage() {
+    let counter = Arc::new(Mutex::new(0));
+    let cond = Arc::new(Condvar::new());
+    let ccounter = counter.clone();
+    let ccond = cond.clone();
+
+    // 该线程的业务流程开始和结束时都进行一次计数, 不过结束的计数需要等待通知
+    let handler = thread::spawn(move || {
+        let mut counter = ccounter.lock().unwrap();
+
+        // process...
+        println!("sub process...");
+        *counter += 1;
+        // 通知主线程
+        ccond.notify_one();
+
+        // 业务流程结束, 等待主线程通知后进行收尾流程
+        while *counter < 2 {
+            counter = ccond.wait(counter).unwrap();
+        }
+        println!("sub process end...");
+        *counter += 1;
+        ccond.notify_one();
+    });
+
+    // 等待业务流程开始
+    let mut counter = counter.lock().unwrap();
+    while *counter < 1 {
+        counter = cond.wait(counter).unwrap();
+    }
+    println!("counter = {}", *counter);
+
+    // 主线程的业务流程
+    println!("main process...");
+    *counter += 1;
+    cond.notify_one();
+
+    // 等待业务流程结束
+    while *counter < 3 {
+        counter = cond.wait(counter).unwrap();
+    }
+    println!("counter = {}", *counter);
+    println!("main process end...");
+
+}
+
 pub fn threads() {
     elevators_process();
     thread_sync_msg();
     different_data_send();
     rwlock_test();
+    condvar_usage();
 }
