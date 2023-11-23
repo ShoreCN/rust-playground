@@ -235,11 +235,15 @@ use std::ops::Sub;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
 
+// 常量
 const N_TIMES: u64 = 10000000;
 const N_THREADS: usize = 10;
 
 static R: AtomicU64 = AtomicU64::new(0);
 // static M: Mutex<u64> = Mutex::new(0);
+
+// 静态变量
+static mut PROCESS_NUM: u64 = 0;
 
 fn add_n_times(n: u64) -> thread::JoinHandle<()> {
     thread::spawn(move || {
@@ -249,6 +253,11 @@ fn add_n_times(n: u64) -> thread::JoinHandle<()> {
             // 使用Mutex也可以实现原子操作, 不过性能会比AtomicU64差很多
             // let mut m = M.lock().unwrap();
             // *m += 1;
+
+            // 静态变量的修改是不安全的, 需要使用unsafe关键字
+            unsafe{
+                PROCESS_NUM += 1;
+            }
         }
     })
 }
@@ -267,6 +276,12 @@ fn atomic_test() {
 
     assert_eq!(N_TIMES * N_THREADS as u64, R.load(Ordering::Relaxed));
     // assert_eq!(N_TIMES * N_THREADS as u64, *M.lock().unwrap());
+
+    println!("PROCESS_NUM = {}", unsafe{PROCESS_NUM});  
+    // 可以看到每次运行的结果都不一样
+    // PROCESS_NUM = 25560112
+    // PROCESS_NUM = 26349786
+    // PROCESS_NUM = 26547375
 
     println!("{:?}",Instant::now().sub(s));
 }
