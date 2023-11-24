@@ -236,7 +236,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
 
 // 常量
-const N_TIMES: u64 = 10000000;
+const N_TIMES: u64 = 1000000;
 const N_THREADS: usize = 10;
 
 static R: AtomicU64 = AtomicU64::new(0);
