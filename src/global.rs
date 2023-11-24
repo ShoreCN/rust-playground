@@ -106,13 +106,14 @@ fn init_by_leak() -> Option<&'static mut Config> {
     Some(Box::leak(t))
 }
 
-const MUTEX_ELEVATOR_LIMIT: Mutex<ElevatorLimit> = Mutex::new(
+static MUTEX_ELEVATOR_LIMIT: Mutex<ElevatorLimit> = Mutex::new(
     ElevatorLimit {
         max_weight: 3000,
         max_people: 33,
     }
 );
 
+static MUTEX_ELEVATOR_WEIGHT_LIMIT: Mutex<u32> = Mutex::new(3000);
 
 pub fn global() {
     println!("read global config result is HASHMAP: {:?}", *DEPENDENCYIES_CONFIG);
@@ -150,6 +151,14 @@ pub fn global() {
     }
 
     println!("MUTEX_ELEVATOR_LIMIT = {:?}", MUTEX_ELEVATOR_LIMIT.lock().unwrap());
+    println!("MUTEX_ELEVATOR_WEIGHT_LIMIT = {}", MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap());
+    // 修改const MUTEX_ELEVATOR_LIMIT的成员数值
+    MUTEX_ELEVATOR_LIMIT.lock().unwrap().max_weight = 4000;
+    println!("MUTEX_ELEVATOR_LIMIT = {:?}", MUTEX_ELEVATOR_LIMIT.lock().unwrap());
+    
+    // 修改MUTEX_ELEVATOR_WEIGHT_LIMIT
+    *MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap() = 4000;
+    println!("MUTEX_ELEVATOR_WEIGHT_LIMIT = {}", MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap());
 
     // 在其他线程中使用全局变量
     std::thread::spawn(|| {
@@ -174,5 +183,6 @@ pub fn global() {
         }
 
         println!("MUTEX_ELEVATOR_LIMIT = {:?}", MUTEX_ELEVATOR_LIMIT.lock().unwrap());
+        println!("MUTEX_ELEVATOR_WEIGHT_LIMIT = {}", MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap());
     }).join().unwrap();
 }
