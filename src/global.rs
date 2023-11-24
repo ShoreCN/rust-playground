@@ -52,6 +52,68 @@ lazy_static! {
     };
 }
 
+struct ElevatorLimit {
+    max_weight: u32,
+    max_people: u32,
+} 
+
+static mut ELEVATOR_LIMIT: ElevatorLimit = ElevatorLimit {
+    max_weight: 1000,
+    max_people: 13,
+};
+fn init_in_runtime() -> ElevatorLimit {
+    ElevatorLimit {
+        max_weight: 2000,
+        max_people: 20,
+    }
+}
+
+static mut ELEVATOR_LIMIT2: Option<ElevatorLimit> = None;
+fn init_in_runtime2() -> Option<ElevatorLimit> {
+    Some(ElevatorLimit {
+        max_weight: 2000,
+        max_people: 20,
+    })
+}
+
+#[derive(Debug)]
+struct Config {
+    a: String,
+    b: String,
+}
+static mut CONFIG: Option<&mut Config> = None;
+
+fn init_by_leak() -> Option<&'static mut Config> {
+    let t = Box::new(Config {
+        a: "A".to_string(),
+        b: "B".to_string(),
+    });
+    Some(Box::leak(t))
+}
+
+
 pub fn global() {
     println!("read global config result is HASHMAP: {:?}", *DEPENDENCYIES_CONFIG);
+
+    // 修改全局变量
+    unsafe { ELEVATOR_LIMIT = init_in_runtime() };
+    println!("ELEVATOR_LIMIT.max_weight = {}", unsafe { ELEVATOR_LIMIT.max_weight });
+    println!("ELEVATOR_LIMIT.max_people = {}", unsafe { ELEVATOR_LIMIT.max_people });
+
+    // 修改全局变量
+    unsafe {
+        ELEVATOR_LIMIT2 = init_in_runtime2();
+        println!("ELEVATOR_LIMIT2.max_weight = {}", ELEVATOR_LIMIT2.as_ref().unwrap().max_weight);
+        println!("ELEVATOR_LIMIT2.max_people = {}", ELEVATOR_LIMIT2.as_ref().unwrap().max_people);
+
+        ELEVATOR_LIMIT2 = init_in_runtime2();
+        println!("ELEVATOR_LIMIT2.max_weight = {}", ELEVATOR_LIMIT2.as_ref().unwrap().max_weight);
+        println!("ELEVATOR_LIMIT2.max_people = {}", ELEVATOR_LIMIT2.as_ref().unwrap().max_people);
+    }
+
+    unsafe {
+        CONFIG = init_by_leak();
+
+        println!("{:?}", CONFIG)
+    }
 }
