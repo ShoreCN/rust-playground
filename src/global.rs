@@ -4,7 +4,7 @@ use std::fs;
 
 // 从Cargo.toml中读取配置内容
 lazy_static! {
-    static ref CONFIG: HashMap<String, String> = {
+    static ref DEPENDENCYIES_CONFIG: HashMap<String, String> = {
         let mut config = HashMap::new();
         // 打开文件, 读取Cargo.toml配置中的依赖库和版本号
         // 所需内容包含在[dependencies]中
@@ -17,7 +17,7 @@ lazy_static! {
         // 截取[dependencies]字段中的内容
         let dependencies = &content[dependencies_index..end_index];
         println!("dependencies_index = {dependencies_index} end_index = {end_index}"); 
-        println!("dependencies = {}", dependencies);
+        println!("original dependencies content = {}", dependencies);
         // 依赖库和版本号的格式为: 依赖库 = 版本号
         // 通过换行符分割字符串, 得到每一行的内容
         // 遍历每一行内容, 通过=分割字符串, 得到依赖库和版本号
@@ -53,5 +53,5 @@ lazy_static! {
 }
 
 pub fn global() {
-    println!("read global config result is HASHMAP: {:?}", *CONFIG);
+    println!("read global config result is HASHMAP: {:?}", *DEPENDENCYIES_CONFIG);
 }
