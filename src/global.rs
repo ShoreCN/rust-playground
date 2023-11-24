@@ -115,6 +115,35 @@ static MUTEX_ELEVATOR_LIMIT: Mutex<ElevatorLimit> = Mutex::new(
 
 static MUTEX_ELEVATOR_WEIGHT_LIMIT: Mutex<u32> = Mutex::new(3000);
 
+// 使用OnceLock实现单例模式
+// OnceLock是一个原子类型, 可以保证多线程环境下只执行一次
+use std::sync::OnceLock;
+struct Logger {
+    level: u8,
+    _path: String,
+}
+
+impl Logger {
+    fn log(&self, level: u8, message: &str) {
+        if level > self.level {
+            return;
+        }
+        println!("log message: {}", message);
+    }
+}
+
+static LOGGER: OnceLock<Logger> = OnceLock::new();
+
+fn get_logger() -> &'static Logger {
+    LOGGER.get_or_init(|| {
+        println!("init logger");
+        Logger {
+            level: 0,
+            _path: "/var/log/rust.log".to_string(),
+        }
+    })
+}
+
 pub fn global() {
     println!("read global config result is HASHMAP: {:?}", *DEPENDENCYIES_CONFIG);
 
@@ -160,6 +189,9 @@ pub fn global() {
     *MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap() = 4000;
     println!("MUTEX_ELEVATOR_WEIGHT_LIMIT = {}", MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap());
 
+    let logger = get_logger();
+    logger.log(0, "log in main thread");
+
     // 在其他线程中使用全局变量
     std::thread::spawn(|| {
         println!("Global variable in other thread:");
@@ -184,5 +216,8 @@ pub fn global() {
 
         println!("MUTEX_ELEVATOR_LIMIT = {:?}", MUTEX_ELEVATOR_LIMIT.lock().unwrap());
         println!("MUTEX_ELEVATOR_WEIGHT_LIMIT = {}", MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap());
+
+        let logger = get_logger();
+        logger.log(0, "log in other thread");
     }).join().unwrap();
 }
