@@ -115,6 +115,10 @@ static MUTEX_ELEVATOR_LIMIT: Mutex<ElevatorLimit> = Mutex::new(
 
 static MUTEX_ELEVATOR_WEIGHT_LIMIT: Mutex<u32> = Mutex::new(3000);
 
+// static可以修饰const function, 但是String::new()不是const function
+// 可以通过Option<String>实现, 在运行时初始化
+static MUTEX_ELEVATOR_NOTIFICATION: Mutex<Option<String>> = Mutex::new(None);
+
 // 使用OnceLock实现单例模式
 // OnceLock是一个原子类型, 可以保证多线程环境下只执行一次
 use std::sync::OnceLock;
@@ -189,6 +193,10 @@ pub fn global() {
     *MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap() = 4000;
     println!("MUTEX_ELEVATOR_WEIGHT_LIMIT = {}", MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap());
 
+    // 修改MUTEX_ELEVATOR_NOTIFICATION
+    *MUTEX_ELEVATOR_NOTIFICATION.lock().unwrap() = Some("Initial notification".to_string());
+    println!("MUTEX_ELEVATOR_NOTIFICATION = {:?}", MUTEX_ELEVATOR_NOTIFICATION.lock().unwrap());
+
     let logger = get_logger();
     logger.log(0, "log in main thread");
 
@@ -216,6 +224,8 @@ pub fn global() {
 
         println!("MUTEX_ELEVATOR_LIMIT = {:?}", MUTEX_ELEVATOR_LIMIT.lock().unwrap());
         println!("MUTEX_ELEVATOR_WEIGHT_LIMIT = {}", MUTEX_ELEVATOR_WEIGHT_LIMIT.lock().unwrap());
+
+        println!("MUTEX_ELEVATOR_NOTIFICATION = {:?}", MUTEX_ELEVATOR_NOTIFICATION.lock().unwrap());
 
         let logger = get_logger();
         logger.log(0, "log in other thread");
