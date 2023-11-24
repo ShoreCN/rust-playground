@@ -1,6 +1,7 @@
 use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::fs;
+use std::sync::Mutex;
 
 // 从Cargo.toml中读取配置内容
 lazy_static! {
@@ -52,6 +53,7 @@ lazy_static! {
     };
 }
 
+#[derive(Debug)]
 struct ElevatorLimit {
     max_weight: u32,
     max_people: u32,
@@ -104,6 +106,13 @@ fn init_by_leak() -> Option<&'static mut Config> {
     Some(Box::leak(t))
 }
 
+const MUTEX_ELEVATOR_LIMIT: Mutex<ElevatorLimit> = Mutex::new(
+    ElevatorLimit {
+        max_weight: 3000,
+        max_people: 33,
+    }
+);
+
 
 pub fn global() {
     println!("read global config result is HASHMAP: {:?}", *DEPENDENCYIES_CONFIG);
@@ -140,6 +149,8 @@ pub fn global() {
         println!("NOTIFICATION.sender = {}", NOTIFICATION.as_ref().unwrap().sender);
     }
 
+    println!("MUTEX_ELEVATOR_LIMIT = {:?}", MUTEX_ELEVATOR_LIMIT.lock().unwrap());
+
     // 在其他线程中使用全局变量
     std::thread::spawn(|| {
         println!("Global variable in other thread:");
@@ -161,5 +172,7 @@ pub fn global() {
             println!("NOTIFICATION.message = {}", NOTIFICATION.as_ref().unwrap().message);
             println!("NOTIFICATION.sender = {}", NOTIFICATION.as_ref().unwrap().sender);
         }
+
+        println!("MUTEX_ELEVATOR_LIMIT = {:?}", MUTEX_ELEVATOR_LIMIT.lock().unwrap());
     }).join().unwrap();
 }
