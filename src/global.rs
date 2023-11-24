@@ -76,6 +76,19 @@ fn init_in_runtime2() -> Option<ElevatorLimit> {
     })
 }
 
+struct Notification {
+    message: String,
+    sender: String,
+}
+
+static mut NOTIFICATION: Option<Notification> = None;
+fn init_string_global(n: usize) -> Option<Notification> {
+    Some(Notification {
+        message: ("hello".repeat(n)).to_string(),
+        sender: "rust".to_string(),
+    })
+}
+
 #[derive(Debug)]
 struct Config {
     a: String,
@@ -116,4 +129,37 @@ pub fn global() {
 
         println!("{:?}", CONFIG)
     }
+
+    unsafe {
+        NOTIFICATION = init_string_global(1);
+        println!("NOTIFICATION.message = {}", NOTIFICATION.as_ref().unwrap().message);
+        println!("NOTIFICATION.sender = {}", NOTIFICATION.as_ref().unwrap().sender);
+
+        NOTIFICATION = init_string_global(2);
+        println!("NOTIFICATION.message = {}", NOTIFICATION.as_ref().unwrap().message);
+        println!("NOTIFICATION.sender = {}", NOTIFICATION.as_ref().unwrap().sender);
+    }
+
+    // 在其他线程中使用全局变量
+    std::thread::spawn(|| {
+        println!("Global variable in other thread:");
+        println!("read global config result is HASHMAP: {:?}", *DEPENDENCYIES_CONFIG);
+
+        println!("ELEVATOR_LIMIT.max_weight = {}", unsafe { ELEVATOR_LIMIT.max_weight });
+        println!("ELEVATOR_LIMIT.max_people = {}", unsafe { ELEVATOR_LIMIT.max_people });
+
+        unsafe {
+            println!("ELEVATOR_LIMIT2.max_weight = {}", ELEVATOR_LIMIT2.as_ref().unwrap().max_weight);
+            println!("ELEVATOR_LIMIT2.max_people = {}", ELEVATOR_LIMIT2.as_ref().unwrap().max_people);
+        }
+
+        unsafe {
+            println!("{:?}", CONFIG)
+        }
+
+        unsafe {
+            println!("NOTIFICATION.message = {}", NOTIFICATION.as_ref().unwrap().message);
+            println!("NOTIFICATION.sender = {}", NOTIFICATION.as_ref().unwrap().sender);
+        }
+    }).join().unwrap();
 }
