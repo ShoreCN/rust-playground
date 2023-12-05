@@ -69,6 +69,41 @@ fn error_propagation2() -> Result<String, std::io::Error> {
     Ok(s)
 }
 
+// 自定义错误类型
+use std::fmt;
+
+#[derive(Debug)]
+struct CustomError {
+    code: usize,
+    message: String,
+}
+
+impl fmt::Display for CustomError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self.code {
+            200 => write!(f, "success"),
+            _ => write!(f, "error: code={}, message={}", self.code, self.message),
+        }
+    }
+}
+
+fn custom_error() {
+    // 手动构造CustomError
+    let err = CustomError {
+        code: 200,
+        message: "ok".to_string(),
+    };
+    println!("customize err = {}", err);
+    println!("customize err display = {:?}", err);
+
+    let err2 = CustomError {
+        code: 500,
+        message: "server error".to_string(),
+    };
+    println!("customize err2 = {}", err2);
+    println!("customize err2 display = {:?}", err2);
+}
+
 pub fn error() {
     trigger_panic();
     handle_panic();
@@ -84,4 +119,6 @@ pub fn error() {
         Err(e) => panic!("error: {:?}", e),
     };
     println!("result2 = {:?}", result2);
+
+    custom_error();
 }

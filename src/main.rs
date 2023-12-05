@@ -189,6 +189,7 @@ fn main() {
     println!("\n**[Lifetime]**");
     lifetime::lifetime();
 
+    println!("\n**[Error]**");
     error::error();
 
     // test lib import
