@@ -87,6 +87,15 @@ impl fmt::Display for CustomError {
     }
 }
 
+impl From<std::io::Error> for CustomError {
+    fn from(err: std::io::Error) -> Self {
+        CustomError {
+            code: 999,
+            message: format!("io error[{}]", err).to_string(),
+        }
+    }
+}
+
 fn custom_error() {
     // 手动构造CustomError
     let err = CustomError {
@@ -102,6 +111,14 @@ fn custom_error() {
     };
     println!("customize err2 = {}", err2);
     println!("customize err2 display = {:?}", err2);
+}
+
+fn from_error() -> Result<(), CustomError> {
+    // 通过From trait将std::io::Error转换为CustomError
+    // 使用?可以自动调用From trait
+    let _file = std::fs::File::open("notexistfile.txt")?;
+
+    Ok(())
 }
 
 pub fn error() {
@@ -121,4 +138,6 @@ pub fn error() {
     println!("result2 = {:?}", result2);
 
     custom_error();
+    let e = from_error();
+    println!("from_error = {:?}", e);
 }
