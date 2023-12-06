@@ -125,13 +125,49 @@ fn from_error() -> Result<(), CustomError> {
 // 1. 使用特征对象实现, Box<dyn Error>
 fn diff_error_occurs() -> Result<String, Box<dyn std::error::Error>> {
 
-    let file = std::env::var("hello.txt")?;
+    let file = std::env::var("notexistfile.txt")?;
+    let source = std::fs::read_to_string(file)?;
+    Ok(source)
+}
+
+// 2. 使用枚举实现, 配合自定义错误类型实现统一化
+#[derive(Debug)]
+pub enum MyError {
+    Io(std::io::Error),
+    Env(std::env::VarError),
+}
+
+impl From<std::io::Error> for MyError {
+    fn from(err: std::io::Error) -> Self {
+        MyError::Io(err)
+    }
+}
+
+impl From<std::env::VarError> for MyError {
+    fn from(err: std::env::VarError) -> Self {
+        MyError::Env(err)
+    }
+}
+
+// impl std::error::Error for MyError {}
+
+impl std::fmt::Display for MyError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            MyError::Io(err) => write!(f, "io error: {}", err),
+            MyError::Env(err) => write!(f, "env error: {}", err),
+        }
+    }
+}
+
+fn diff_error_occurs2() -> Result<String, MyError> {
+    let file = std::env::var("TEST_FILE")?;
     let source = std::fs::read_to_string(file)?;
     Ok(source)
 }
 
 
-pub fn error() {
+pub fn error() -> Result<(), MyError> {
     trigger_panic();
     handle_panic();
 
@@ -152,4 +188,8 @@ pub fn error() {
     println!("from_error = {:?}", e);
 
     let _ = diff_error_occurs();
+    let content = diff_error_occurs2()?;
+    println!("content = {}", content);
+
+    Ok(())
 }

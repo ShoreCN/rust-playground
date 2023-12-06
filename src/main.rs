@@ -190,7 +190,8 @@ fn main() {
     lifetime::lifetime();
 
     println!("\n**[Error]**");
-    error::error();
+    let r = error::error();
+    println!("error = {:?}", r);
 
     // test lib import
     println!("\n**[Lib Import]**");
