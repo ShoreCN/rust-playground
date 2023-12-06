@@ -121,6 +121,16 @@ fn from_error() -> Result<(), CustomError> {
     Ok(())
 }
 
+// 统一化错误类型
+// 1. 使用特征对象实现, Box<dyn Error>
+fn diff_error_occurs() -> Result<String, Box<dyn std::error::Error>> {
+
+    let file = std::env::var("hello.txt")?;
+    let source = std::fs::read_to_string(file)?;
+    Ok(source)
+}
+
+
 pub fn error() {
     trigger_panic();
     handle_panic();
@@ -140,4 +150,6 @@ pub fn error() {
     custom_error();
     let e = from_error();
     println!("from_error = {:?}", e);
+
+    let _ = diff_error_occurs();
 }

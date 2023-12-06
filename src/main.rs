@@ -193,6 +193,7 @@ fn main() {
     error::error();
 
     // test lib import
+    println!("\n**[Lib Import]**");
     passenger::behavior::call_elevator();
     passenger_test();
     call();
