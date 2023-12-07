@@ -47,10 +47,21 @@ unsafe fn unsafe_func() {
     println!("This is an unsafe function");
 }
 
+// 通过FFI(外部函数接口)调用C语言的函数
+extern "C" {
+    fn abs(input: i32) -> i32;
+}
+
+fn call_ffi() {
+    unsafe {
+        println!("Absolute value of -3 according to C: {}", abs(-3));
+    }
+}
 
 pub fn unsafe_code() {
     raw_pointer();
     unsafe {
         unsafe_func();
     }
+    call_ffi();
 }
