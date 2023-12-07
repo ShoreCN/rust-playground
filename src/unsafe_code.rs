@@ -33,6 +33,14 @@ fn raw_pointer() {
         println!("s_raw_ptr = {}", *s_raw_ptr);
     }
 
+    // 创建智能指针的裸指针
+    let box_x = Box::new(666);
+    let direct_raw_ptr = &*box_x as *const i32;
+    let into_raw_ptr = Box::into_raw(box_x);
+    unsafe {
+        println!("direct_raw_ptr = {}", *direct_raw_ptr);
+        println!("into_raw_ptr = {}", *into_raw_ptr);
+    }
 }
 
 
