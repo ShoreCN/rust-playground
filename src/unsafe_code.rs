@@ -58,6 +58,12 @@ fn call_ffi() {
     }
 }
 
+// 通过extern将Rust函数导出给其他语言调用
+#[no_mangle]
+pub extern "C" fn call_from_c() {
+    println!("Just called a Rust function from C!");
+}
+
 pub fn unsafe_code() {
     raw_pointer();
     unsafe {
