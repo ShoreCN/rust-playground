@@ -64,6 +64,17 @@ pub extern "C" fn call_from_c() {
     println!("Just called a Rust function from C!");
 }
 
+// unsafe trait
+unsafe trait Foo {
+    fn foo(&self);
+}
+
+unsafe impl Foo for i32 {
+    fn foo(&self) {
+        println!("foo");
+    }
+}
+
 pub fn unsafe_code() {
     raw_pointer();
     unsafe {
