@@ -43,7 +43,14 @@ fn raw_pointer() {
     }
 }
 
+unsafe fn unsafe_func() {
+    println!("This is an unsafe function");
+}
+
 
 pub fn unsafe_code() {
     raw_pointer();
+    unsafe {
+        unsafe_func();
+    }
 }
