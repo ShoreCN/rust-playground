@@ -27,6 +27,7 @@ mod smart_pointer;
 mod threads;
 mod global;
 mod unsafe_code;
+mod async_code;
 
 fn hello_world() {
     let chinese = "你好，世界！";
@@ -227,4 +228,7 @@ fn main() {
 
     println!("\n**[Unsafe Code]**");
     unsafe_code::unsafe_code();
+
+    println!("\n**[Async Code]**");
+    async_code::async_code();
 }
