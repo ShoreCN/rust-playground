@@ -167,7 +167,7 @@ fn diff_error_occurs2() -> Result<String, MyError> {
 }
 
 
-pub fn error() -> Result<(), MyError> {
+pub fn error(){
     trigger_panic();
     handle_panic();
 
@@ -188,8 +188,9 @@ pub fn error() -> Result<(), MyError> {
     println!("from_error = {:?}", e);
 
     let _ = diff_error_occurs();
-    let content = diff_error_occurs2()?;
-    println!("content = {}", content);
+    // let content = diff_error_occurs2()?;
+    let content = diff_error_occurs2();
+    println!("content = {:?}", content);
 
-    Ok(())
+    // Ok(())
 }
