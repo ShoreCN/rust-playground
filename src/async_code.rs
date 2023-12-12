@@ -1,4 +1,5 @@
 use futures::executor::block_on;
+use futures::future::Future;
 
 // 通过async异步地进行网页下载请求
 async fn parse_html(html: String) -> String {
@@ -14,6 +15,13 @@ async fn download_web(url: &str) -> String{
     r
 }
 
+fn async_code_in_func() -> impl Future<Output = i32>{
+    async {
+        let x = 10;
+        x + 101
+    }
+}
+
 async fn download_task() {
     let d1 = download_web("https://www.baidu.com");
     let d2 = download_web("https://www.google.com");
@@ -23,4 +31,5 @@ async fn download_task() {
 
 pub fn async_code() {
     block_on(download_task());
+    println!("async code in func: {}", block_on(async_code_in_func()));
 }
