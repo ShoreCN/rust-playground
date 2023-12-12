@@ -15,7 +15,7 @@ mod vector;
 mod hashmap;
 mod lifetime;
 mod error;
-use rust_helloworld::{passenger, passenger_test};
+use rust_helloworld::passenger_test;
 use rust_helloworld::passenger::behavior::call_elevator as call;
 use rust_helloworld::doc::doc_test;
 use rust_helloworld::output::output;
@@ -155,80 +155,62 @@ fn repeat_use_var() {
 
 
 fn main() {
-    hello_world();
-    int_type();
-    char_type();
-    copy();
-    changedable_ref();
-    repeat_use_var();
+    // 执行函数和名称的对应表
+    let funcs: Vec<(&str, fn())>  = vec![
+        ("hello", hello_world),
+        ("int_type", int_type),
+        ("char_type", char_type),
+        ("copy", copy),
+        ("changedable_ref", changedable_ref),
+        ("repeat_use_var", repeat_use_var),
+        ("slice", str_test::slice),
+        ("str_op", str_test::str_op),
+        ("tuple_learning", tuple_test::tuple_learning),
+        ("struct_test", struct_test::struct_test),
+        ("enum_test", enum_test::enum_test),
+        ("array_test", array_test::array_test),
+        ("process_test", proccess_test::process_test),
+        ("match_test", match_test::match_test),
+        ("option_test", option_test::option_test),
+        ("pattern_test", pattern_test::pattern_test),
+        ("method_test", method::method_test),
+        ("generic", generic::generic),
+        ("trait_test", trait_test::trait_test),
+        ("vector", vector::vector),
+        ("hashmap", hashmap::hashmap),
+        ("lifetime", lifetime::lifetime),
+        ("error", error::error),
+        ("passenger_test", passenger_test),
+        ("call", call),
+        ("doc_test", doc_test),
+        ("output", output),
+        ("closure", closure::closure),
+        ("iterator", iterator::iterator),
+        ("transfer", transfer::transfer),
+        ("data_type", data_type::data_type),
+        ("smart_pointer", smart_pointer::smart_pointer),
+        ("threads", threads::threads),
+        ("global", global::global),
+        ("unsafe_code", unsafe_code::unsafe_code),
+        ("async_code", async_code::async_code),
+    ];
 
-    str_test::slice();
-    str_test::str_op();
+    // 根据命令行参数, 执行不同的函数, 命令行参数是可以自动推导的
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() > 1 {
+        let func_name = &args[1];
+        if let Some(func) = funcs.iter().find(|(name, _)| *name == func_name.as_str()) {
+            println!("\n**[{}]**", func_name);
+            (func.1)();
+        } else {
+            println!("not found function: {}", func_name);
+        }
+        return;
+    }
 
-    tuple_test::tuple_learning();
-
-    struct_test::struct_test();
-
-    enum_test::enum_test();
-
-    array_test::array_test();
-
-    proccess_test::process_test();
-
-    match_test::match_test();
-    option_test::option_test();
-    pattern_test::pattern_test();
-
-    method::method_test();
-
-    generic::generic();
-
-    trait_test::trait_test();
-
-    vector::vector();
-    hashmap::hashmap();
-
-    println!("\n**[Lifetime]**");
-    lifetime::lifetime();
-
-    println!("\n**[Error]**");
-    let r = error::error();
-    println!("error = {:?}", r);
-
-    // test lib import
-    println!("\n**[Lib Import]**");
-    passenger::behavior::call_elevator();
-    passenger_test();
-    call();
-
-    doc_test();
-
-    output();
-
-    println!("\n**[Closure]**");
-    closure::closure();
-
-    println!("\n**[Iterator]**");
-    iterator::iterator();
-
-    println!("\n**[Transfer]**");
-    transfer::transfer();
-
-    println!("\n**[Data Type]**");
-    data_type::data_type();
-
-    println!("\n**[Smart Pointer]**");
-    smart_pointer::smart_pointer();
-
-    println!("\n**[Threads]**");
-    threads::threads();
-
-    println!("\n**[Global]**");
-    global::global();
-
-    println!("\n**[Unsafe Code]**");
-    unsafe_code::unsafe_code();
-
-    println!("\n**[Async Code]**");
-    async_code::async_code();
+    // 如果没有指定命令行参数, 则执行所有的函数
+    for (name, func) in funcs {
+        println!("\n**[{}]**", name);
+        func();
+    }
 }
